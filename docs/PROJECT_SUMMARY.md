@@ -56,18 +56,18 @@ All six units preserve the same visible 4-stage contract:
 
 Primary spec:
 
-- [TRIPLE_FP_UNITS_SPEC.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TRIPLE_FP_UNITS_SPEC.md)
+- [TRIPLE_FP_UNITS_SPEC.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/TRIPLE_FP_UNITS_SPEC.md)
 
 Additional notes:
 
-- [SPEC_VALIDATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/SPEC_VALIDATION.md)
-- [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/BLOCK_DIAGRAMS.md)
+- [SPEC_VALIDATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/SPEC_VALIDATION.md)
+- [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BLOCK_DIAGRAMS.md)
 
 ## Verification
 
 Top-level verification note:
 
-- [OFFLINE_VERIFICATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/OFFLINE_VERIFICATION.md)
+- [OFFLINE_VERIFICATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/OFFLINE_VERIFICATION.md)
 
 Directed standalone benches:
 
@@ -119,14 +119,20 @@ These models are meant for:
 If you want to understand the architecture first:
 
 1. [README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/README.md)
-2. [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/BLOCK_DIAGRAMS.md)
+2. [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BLOCK_DIAGRAMS.md)
 3. [TripleMulAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv)
 
 If you want verification first:
 
-1. [OFFLINE_VERIFICATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/OFFLINE_VERIFICATION.md)
+1. [OFFLINE_VERIFICATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/OFFLINE_VERIFICATION.md)
 2. [verif/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/README.md)
 3. [uvm_lite/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/README.md)
+
+If you want the audit trail:
+
+1. [BUG_REPORT_AND_FIXES.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BUG_REPORT_AND_FIXES.md)
+2. [COMMAND_HISTORY_DUMP.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/COMMAND_HISTORY_DUMP.md)
+3. [PROMPT_HISTORY_DUMP.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/PROMPT_HISTORY_DUMP.md)
 
 If you want the software model first:
 

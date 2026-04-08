@@ -178,8 +178,8 @@ The engineering work and verification were present, but the repo landing experie
 Add:
 
 - a detailed [README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/README.md)
-- a top-level [PROJECT_SUMMARY.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/PROJECT_SUMMARY.md)
-- a diagrams-only [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/BLOCK_DIAGRAMS.md)
+- a top-level [PROJECT_SUMMARY.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/PROJECT_SUMMARY.md)
+- a diagrams-only [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BLOCK_DIAGRAMS.md)
 
 ### Result
 
