@@ -10,8 +10,8 @@ The standalone floating-point units in this folder were compiled and simulated l
 Assumed shell variables:
 
 ```sh
-export BOOMV3_ROOT=/path/to/BoomV3
-export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+export REPO_ROOT=/path/to/triple_fp_units
+export DEPS_DIR="$REPO_ROOT/deps/hardfloat"
 cd "$REPO_ROOT"
 ```
 
@@ -62,16 +62,16 @@ New RTL in this subproject:
 - `TripleMulPipe_l4_f32.sv`
 - `TripleMulAddPipe_l4_f32.sv`
 
-Existing parent-workspace dependencies:
+Vendored local dependencies:
 
-- `RoundRawFNToRecFN_e11_s53.sv`
-- `RoundRawFNToRecFN_e8_s24.sv`
-- `RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv`
-- `RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv`
-- `RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv`
-- `RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv`
-- `INToRecFN_i64_e11_s53.sv`
-- `INToRecFN_i64_e8_s24.sv`
+- `deps/hardfloat/RoundRawFNToRecFN_e11_s53.sv`
+- `deps/hardfloat/RoundRawFNToRecFN_e8_s24.sv`
+- `deps/hardfloat/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv`
+- `deps/hardfloat/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv`
+- `deps/hardfloat/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv`
+- `deps/hardfloat/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv`
+- `deps/hardfloat/INToRecFN_i64_e11_s53.sv`
+- `deps/hardfloat/INToRecFN_i64_e8_s24.sv`
 
 ## Tool Install
 
@@ -107,10 +107,10 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f64.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/INToRecFN_i64_e11_s53.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
+  "$DEPS_DIR/INToRecFN_i64_e11_s53.sv" \
+  "$DEPS_DIR/RoundRawFNToRecFN_e11_s53.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
 "$REPO_ROOT/obj_dir_quad_f64/Vtb_triple_mul_add_f64"
 ```
 
@@ -128,10 +128,10 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/INToRecFN_i64_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
+  "$DEPS_DIR/INToRecFN_i64_e8_s24.sv" \
+  "$DEPS_DIR/RoundRawFNToRecFN_e8_s24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
 "$REPO_ROOT/obj_dir_quad_f32/Vtb_triple_mul_add_f32"
 ```
 
@@ -157,8 +157,8 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f64.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+  "$DEPS_DIR/RoundRawFNToRecFN_e11_s53.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
 "$REPO_ROOT/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64"
 ```
 
@@ -172,8 +172,8 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
+  "$DEPS_DIR/RoundRawFNToRecFN_e8_s24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
 "$REPO_ROOT/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32"
 ```
 

@@ -8,7 +8,7 @@ What in this project is HardFloat-derived infrastructure, and what is custom ari
 
 ## Executive Summary
 
-Directly used from the surrounding BOOM / HardFloat-generated environment:
+Directly used from the HardFloat-generated environment, now vendored locally under `deps/hardfloat/`:
 
 - existing rounders
 - existing recFN format conventions
@@ -29,7 +29,7 @@ Custom in this project:
 
 ## 1. Direct HardFloat-Related Dependencies
 
-The new units directly instantiate the existing rounder modules already present in the parent BOOM workspace:
+The new units directly instantiate the existing rounder modules, vendored locally under `deps/hardfloat/`:
 
 - `RoundRawFNToRecFN_e11_s53.sv`
 - `RoundRawFNToRecFN_e8_s24.sv`
@@ -40,7 +40,7 @@ Those rounders are used in:
 - [TripleMulRecFNPipe_l2.sv](../TripleMulRecFNPipe_l2.sv)
 - [TripleMulAddRecFNPipe_l2.sv](../TripleMulAddRecFNPipe_l2.sv)
 
-These modules are not reimplemented here. The project reuses them as existing infrastructure from the BOOM / HardFloat tree.
+These modules are not reimplemented here. The project vendors and reuses them as existing HardFloat infrastructure.
 
 ## 2. Direct Testbench-Side HardFloat Dependencies
 
@@ -56,7 +56,7 @@ These are used in:
 - [tb_triple_mul_add_f64.sv](../tb_triple_mul_add_f64.sv)
 - [tb_triple_mul_add_f32.sv](../tb_triple_mul_add_f32.sv)
 
-Again, these are reused as existing local infrastructure rather than rewritten.
+Again, these are vendored support modules rather than rewritten arithmetic.
 
 ## 3. Indirect HardFloat Influence On The New RTL
 
@@ -117,7 +117,7 @@ HardFloat contributed:
 
 HardFloat and its companion tooling influenced verification in two ways:
 
-- by providing the local rounder behavior and recFN conventions that the benches compare against
+- by providing the vendored rounder behavior and recFN conventions that the benches compare against
 - by enabling the Berkeley TestFloat-backed replay flow used earlier for the triple-add and triple-multiply families
 
 For the later `a*b*c+d` unit family, the project reused the same style of verification thinking, but the random vector flow is Python-reference-backed because the external source used in this project is naturally 3-operand-oriented.

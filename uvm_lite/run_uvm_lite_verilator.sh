@@ -3,8 +3,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 TRIPLE_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
-ROOT="$(cd -- "${TRIPLE_DIR}/.." && pwd)"
 UVM_LITE_DIR="${TRIPLE_DIR}/uvm_lite"
+DEPS_DIR="${TRIPLE_DIR}/deps/hardfloat"
 
 run_f64() {
   verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
@@ -22,8 +22,8 @@ run_f64() {
     "${TRIPLE_DIR}/TripleMulPipe_l4_f64.sv" \
     "${TRIPLE_DIR}/TripleMulRecFNPipe_l2.sv" \
     "${TRIPLE_DIR}/TripleMulRecFNToRaw.sv" \
-    "${ROOT}/RoundRawFNToRecFN_e11_s53.sv" \
-    "${ROOT}/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+    "${DEPS_DIR}/RoundRawFNToRecFN_e11_s53.sv" \
+    "${DEPS_DIR}/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
 
   "${UVM_LITE_DIR}/obj_dir_f64/Vtb_triple_fp_uvm_lite_f64"
 }
@@ -44,8 +44,8 @@ run_f32() {
     "${TRIPLE_DIR}/TripleMulPipe_l4_f32.sv" \
     "${TRIPLE_DIR}/TripleMulRecFNPipe_l2.sv" \
     "${TRIPLE_DIR}/TripleMulRecFNToRaw.sv" \
-    "${ROOT}/RoundRawFNToRecFN_e8_s24.sv" \
-    "${ROOT}/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
+    "${DEPS_DIR}/RoundRawFNToRecFN_e8_s24.sv" \
+    "${DEPS_DIR}/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
 
   "${UVM_LITE_DIR}/obj_dir_f32/Vtb_triple_fp_uvm_lite_f32"
 }

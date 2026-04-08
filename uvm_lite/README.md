@@ -18,8 +18,8 @@ It is intentionally "UVM-lite":
 Assumed shell variables:
 
 ```sh
-export BOOMV3_ROOT=/path/to/BoomV3
-export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+export REPO_ROOT=/path/to/triple_fp_units
+export DEPS_DIR="$REPO_ROOT/deps/hardfloat"
 cd "$REPO_ROOT"
 ```
 
@@ -108,8 +108,8 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulPipe_l4_f64.sv" \
   "$REPO_ROOT/TripleMulRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+  "$DEPS_DIR/RoundRawFNToRecFN_e11_s53.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
 "$REPO_ROOT/uvm_lite/obj_dir_f64/Vtb_triple_fp_uvm_lite_f64"
 ```
 
@@ -131,8 +131,8 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulPipe_l4_f32.sv" \
   "$REPO_ROOT/TripleMulRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
+  "$DEPS_DIR/RoundRawFNToRecFN_e8_s24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
 "$REPO_ROOT/uvm_lite/obj_dir_f32/Vtb_triple_fp_uvm_lite_f32"
 ```
 

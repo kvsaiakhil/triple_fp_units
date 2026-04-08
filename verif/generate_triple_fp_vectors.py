@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -8,9 +9,23 @@ from typing import Iterable
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-BOOMV3_ROOT = REPO_ROOT.parent
-TESTFLOAT_GEN = BOOMV3_ROOT / "berkeley-hardfloat" / "berkeley-testfloat-3" / "build" / "Linux-x86_64-GCC" / "testfloat_gen"
 OUT_DIR = REPO_ROOT / "verif" / "vectors"
+
+
+def resolve_testfloat_gen() -> Path:
+    env_path = os.environ.get("TESTFLOAT_GEN")
+    if env_path:
+        return Path(env_path).expanduser()
+
+    candidates = [
+        REPO_ROOT / "berkeley-hardfloat" / "berkeley-testfloat-3" / "build" / "Linux-x86_64-GCC" / "testfloat_gen",
+        REPO_ROOT.parent / "berkeley-hardfloat" / "berkeley-testfloat-3" / "build" / "Linux-x86_64-GCC" / "testfloat_gen",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+
+    return candidates[-1]
 
 ROUNDING_MODES = [0, 1, 2, 3, 4, 6]
 SEEDS = [1, 2, 3, 7]
@@ -280,10 +295,16 @@ def mul3_reference(a_bits: int, b_bits: int, c_bits: int, fmt: FPFormat, rm: int
 def collect_random_triples(fmt: FPFormat, n_per_seed: int):
     triples = []
     seen = set()
+    testfloat_gen = resolve_testfloat_gen()
+    if not testfloat_gen.exists():
+        raise FileNotFoundError(
+            "Could not find testfloat_gen. Set TESTFLOAT_GEN or place berkeley-hardfloat "
+            "next to this repo or its parent workspace."
+        )
     for seed in SEEDS:
         seed_count = 0
         cmd = [
-            str(TESTFLOAT_GEN),
+            str(testfloat_gen),
             "-seed", str(seed),
             "-level", "2",
             fmt.name,

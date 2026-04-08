@@ -4,7 +4,7 @@
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
-BOOMV3_ROOT="$(cd -- "${REPO_ROOT}/.." && pwd)"
+DEPS_DIR="${REPO_ROOT}/deps/hardfloat"
 
 cd "${REPO_ROOT}"
 
@@ -26,10 +26,10 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "${REPO_ROOT}/TripleMulAddPipe_l4_f64.sv" \
   "${REPO_ROOT}/TripleMulAddRecFNPipe_l2.sv" \
   "${REPO_ROOT}/TripleMulAddRecFNToRaw.sv" \
-  "${BOOMV3_ROOT}/INToRecFN_i64_e11_s53.sv" \
-  "${BOOMV3_ROOT}/RoundRawFNToRecFN_e11_s53.sv" \
-  "${BOOMV3_ROOT}/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
-  "${BOOMV3_ROOT}/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
+  "${DEPS_DIR}/INToRecFN_i64_e11_s53.sv" \
+  "${DEPS_DIR}/RoundRawFNToRecFN_e11_s53.sv" \
+  "${DEPS_DIR}/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
+  "${DEPS_DIR}/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
 "${REPO_ROOT}/obj_dir_quad_f64/Vtb_triple_mul_add_f64"
 
 # 3. Generate random vectors for the triple multiply-add family.
@@ -43,8 +43,8 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "${REPO_ROOT}/TripleMulAddPipe_l4_f64.sv" \
   "${REPO_ROOT}/TripleMulAddRecFNPipe_l2.sv" \
   "${REPO_ROOT}/TripleMulAddRecFNToRaw.sv" \
-  "${BOOMV3_ROOT}/RoundRawFNToRecFN_e11_s53.sv" \
-  "${BOOMV3_ROOT}/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+  "${DEPS_DIR}/RoundRawFNToRecFN_e11_s53.sv" \
+  "${DEPS_DIR}/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
 "${REPO_ROOT}/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64"
 
 # 5. Python sanity-check sweep across the available units.

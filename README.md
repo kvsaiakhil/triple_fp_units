@@ -38,6 +38,7 @@ Raw arithmetic cores:
 Project navigation:
 
 - landing page: [docs/PROJECT_SUMMARY.md](./docs/PROJECT_SUMMARY.md)
+- optional BOOMv3 / Chipyard background setup: [docs/BOOMV3_SETUP.md](./docs/BOOMV3_SETUP.md)
 - main spec: [docs/TRIPLE_FP_UNITS_SPEC.md](./docs/TRIPLE_FP_UNITS_SPEC.md)
 - design constraints: [docs/DESIGN_CONSTRAINTS.md](./docs/DESIGN_CONSTRAINTS.md)
 - verification summary: [docs/OFFLINE_VERIFICATION.md](./docs/OFFLINE_VERIFICATION.md)
@@ -51,7 +52,7 @@ Project navigation:
 ## Design Goals
 
 - keep the visible interface and latency aligned with the original FMA wrapper style
-- reuse the existing recFN representation and HardFloat rounders already present in the surrounding BOOM workspace
+- reuse the existing recFN representation and HardFloat rounders, now vendored locally under `deps/hardfloat/`
 - build the arithmetic raw cores from scratch instead of chaining top-level FMA wrappers
 - provide strong standalone verification
 - provide readable Python reference/debug models for understanding the datapath
@@ -161,23 +162,30 @@ cargo install svlint
 
 ## Environment Setup
 
-This repo expects to live inside a BOOM workspace, because it reuses the existing HardFloat-generated rounders and helper RTL from the parent tree.
+This repo is now self-contained for normal build and verification flows. The required HardFloat support RTL used by the units and benches is vendored locally under `deps/hardfloat/`.
+
+If you want the original BOOM / Chipyard context used to derive these units, or you want to reproduce the parent `LargeBoomV3Config` environment, see:
+
+- [docs/BOOMV3_SETUP.md](./docs/BOOMV3_SETUP.md)
 
 Typical layout:
 
 ```text
-/path/to/BoomV3/
-  RoundRawFNToRecFN_e11_s53.sv
-  RoundRawFNToRecFN_e8_s24.sv
+/path/to/triple_fp_units/
+  deps/hardfloat/
+  docs/
+  examples/
+  python_reference_models/
+  uvm_lite/
+  verif/
   ...
-  triple_fp_units/
 ```
 
 Set these once per shell:
 
 ```sh
-export BOOMV3_ROOT=/path/to/BoomV3
-export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+export REPO_ROOT=/path/to/triple_fp_units
+export DEPS_DIR="$REPO_ROOT/deps/hardfloat"
 cd "$REPO_ROOT"
 ```
 
@@ -214,10 +222,10 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f64.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/INToRecFN_i64_e11_s53.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
+  "$DEPS_DIR/INToRecFN_i64_e11_s53.sv" \
+  "$DEPS_DIR/RoundRawFNToRecFN_e11_s53.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
 "$REPO_ROOT/obj_dir_quad_f64/Vtb_triple_mul_add_f64"
 ```
 
@@ -231,10 +239,10 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/INToRecFN_i64_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
+  "$DEPS_DIR/INToRecFN_i64_e8_s24.sv" \
+  "$DEPS_DIR/RoundRawFNToRecFN_e8_s24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
 "$REPO_ROOT/obj_dir_quad_f32/Vtb_triple_mul_add_f32"
 ```
 
@@ -252,6 +260,11 @@ If you want to regenerate those vectors:
 ```sh
 python3 "$REPO_ROOT/verif/generate_triple_fp_vectors.py" --n-per-seed 128
 ```
+
+Note:
+
+- replaying the checked-in vectors is self-contained
+- regenerating the original `a+b+c` / `a*b*c` corpus still expects a local `berkeley-hardfloat` / `berkeley-testfloat` checkout beside this repo
 
 Key files:
 
@@ -279,8 +292,8 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f64.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+  "$DEPS_DIR/RoundRawFNToRecFN_e11_s53.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
 "$REPO_ROOT/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64"
 ```
 
@@ -294,8 +307,8 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
+  "$DEPS_DIR/RoundRawFNToRecFN_e8_s24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
 "$REPO_ROOT/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32"
 ```
 

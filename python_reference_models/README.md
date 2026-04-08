@@ -19,8 +19,8 @@ The goal is understanding first:
 Assumed shell variables:
 
 ```sh
-export BOOMV3_ROOT=/path/to/BoomV3
-export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+export REPO_ROOT=/path/to/triple_fp_units
+export DEPS_DIR="$REPO_ROOT/deps/hardfloat"
 cd "$REPO_ROOT"
 ```
 

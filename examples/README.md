@@ -10,8 +10,8 @@ It is aimed at two use cases:
 Assumed shell variables:
 
 ```sh
-export BOOMV3_ROOT=/path/to/BoomV3
-export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+export REPO_ROOT=/path/to/triple_fp_units
+export DEPS_DIR="$REPO_ROOT/deps/hardfloat"
 cd "$REPO_ROOT"
 ```
 
@@ -53,10 +53,10 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
   "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
   "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
-  "$BOOMV3_ROOT/INToRecFN_i64_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
-  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
+  "$DEPS_DIR/INToRecFN_i64_e8_s24.sv" \
+  "$DEPS_DIR/RoundRawFNToRecFN_e8_s24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
+  "$DEPS_DIR/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
 "$REPO_ROOT/obj_dir_quad_f32/Vtb_triple_mul_add_f32"
 ```
 
