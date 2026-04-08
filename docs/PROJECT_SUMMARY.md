@@ -62,6 +62,8 @@ Additional notes:
 
 - [SPEC_VALIDATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/SPEC_VALIDATION.md)
 - [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BLOCK_DIAGRAMS.md)
+- [DESIGN_CONSTRAINTS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/DESIGN_CONSTRAINTS.md)
+- [HARDFLOAT_USAGE_AND_PROVENANCE.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/HARDFLOAT_USAGE_AND_PROVENANCE.md)
 
 ## Verification
 
@@ -113,6 +115,13 @@ These models are meant for:
 - stage-by-stage breakdown
 - software-equivalent output and flag reference
 - debug-friendly traces for add, multiply, and multiply-add
+
+## Examples
+
+Runnable examples live here:
+
+- [examples/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/README.md)
+- [examples/quickstart_commands.sh](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/quickstart_commands.sh)
 
 ## Recommended Reading Paths
 

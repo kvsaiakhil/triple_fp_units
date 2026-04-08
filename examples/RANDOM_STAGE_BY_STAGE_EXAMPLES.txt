@@ -1,0 +1,393 @@
+Random Stage-By-Stage Examples
+==============================
+
+Purpose
+-------
+This file is the companion to:
+
+- /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/STAGE_BY_STAGE_EXAMPLES.txt
+
+The earlier file uses very clean integer-like examples such as 1, 2, 3, and 4.
+This file instead uses deterministic random finite IEEE values so a reader can see how the same units behave on less intuitive floating-point inputs.
+
+These examples are useful for understanding:
+
+- why alignment distances can become very large
+- how one operand can dominate the result
+- why `inexact`, `overflow`, and `underflow` may appear
+- how the pre-round raw bundle still fits the same pipeline contract
+
+Random selection note
+---------------------
+The example inputs below were chosen from a deterministic random stream using seed:
+
+- 20260408
+
+All examples use:
+
+- rounding mode = rne
+
+
+Quick Reminder About The Stages
+-------------------------------
+- stage0_capture
+  wrapper input register
+- stage1_decode_special
+  classify the operands and choose special or finite path
+- stage1_align
+  align add operands to a common exponent
+- stage1_finite_product
+  form the exact product for multiply-style units
+- stage1_accumulate or stage1_add_normalize
+  perform the signed finite arithmetic before rounding
+- stage2_round_register
+  register the raw pre-round bundle
+- stage3_output
+  final recFN output and flags
+
+
+Random Example 1: TripleAddPipe_l4_f64
+--------------------------------------
+Unit:
+- TripleAddPipe_l4_f64
+
+IEEE inputs:
+- a = 0x9aca0a72e6ec7c16
+- b = 0x5f8611e1d23fb0d0
+- c = 0x5bf1130b6fbf6296
+
+What stands out immediately:
+- `b` is enormous compared to `a`
+- `c` is also much larger than `a`
+- the final result is dominated by `b`
+
+Stage 0: wrapper capture
+- a recFN shell = 0x15ada0a72e6ec7c16
+- b recFN shell = 0x09f9611e1d23fb0d0
+- c recFN shell = 0x09c01130b6fbf6296
+- finite exp2 values:
+  a exp2 = -647
+  b exp2 = 453
+  c exp2 = 396
+
+Stage 1 decode_special
+- all operands finite
+- selected_path = finite_path
+
+Stage 1 align
+- minExp = 0x5ad
+- shiftA = 0
+- shiftB = 1100
+- shiftC = 1043
+- key observation:
+  the positive operands are shifted extremely far relative to `a`
+- wideA keeps the small negative term
+- wideB and wideC dominate the aligned sum
+
+Stage 1 accumulate
+- sumSigned is large and positive
+- exact_zero = false
+- selected_sign = 0
+
+Stage 1 normalize_raw
+- msbIdx = 1154
+- normalization_path = right_shift_sticky
+- shiftAmt = 1099
+- narrowedSig = 0xb08f0e91fd8681
+- raw_sExp = 0x09f8
+
+Stage 2 round_register
+- round_sign_r = 0
+- round_sExp_r = 0x09f8
+- round_sig_r  = 0xb08f0e91fd8681
+
+Stage 3 output
+- out_recfn = 0x09f9611e1d23fb0d0
+- out_shell = 0x09f9611e1d23fb0d0
+- flags     = 0x01
+
+Interpretation
+- the result rounds back to operand `b`
+- flags show `inexact = 1`
+- this is a good example of magnitude domination in floating-point addition
+
+
+Random Example 2: TripleMulPipe_l4_f64
+--------------------------------------
+Unit:
+- TripleMulPipe_l4_f64
+
+IEEE inputs:
+- a = 0xeef6610bc7758cd4
+- b = 0x3b1d49248368f12e
+- c = 0x6d3c7ac5c82157d5
+
+What stands out immediately:
+- the product grows so large that it overflows
+
+Stage 0: wrapper capture
+- signs:
+  a sign = 1
+  b sign = 0
+  c sign = 0
+- final product sign should be negative
+
+Stage 1 decode_special
+- all operands finite
+- selected_path = finite_path
+- sign_r = 1
+
+Stage 1 finite_product
+- exact product =
+  0x48e929348522136683a446d3494ef062d96445f8
+- scaledSig = 0x123a4a4d214884d
+- rawExpInt_pre_norm = 3446
+
+Stage 1 normalize_raw
+- msbIdx = 56
+- normalization_path = right_shift_sticky
+- shiftAmt = 1
+- raw_sExp = 0x0d77
+- raw_sig  = 0x91d252690a4427
+
+Stage 2 round_register
+- round_sign_r = 1
+- round_sExp_r = 0x0d77
+
+Stage 3 output
+- out_recfn = 0x1c000000000000000
+- out_shell = 0x1c000000000000000
+- out_class = inf
+- flags     = 0x05
+
+Interpretation
+- overflow = 1
+- inexact  = 1
+- final result is negative infinity in recFN form
+
+
+Random Example 3: TripleMulAddPipe_l4_f64
+-----------------------------------------
+Unit:
+- TripleMulAddPipe_l4_f64
+
+IEEE inputs:
+- a = 0x302e191e58b4c609
+- b = 0x476f3fac7873f854
+- c = 0x9e4374d869cf1777
+- d = 0x774ed60d9d59c2ca
+
+What stands out immediately:
+- the addend `d` is much larger than the triple product term
+- the final result is effectively driven by `d`
+
+Stage 0: wrapper capture
+- a exp2 = -305
+- b exp2 = 67
+- c exp2 = -591
+- d exp2 = 833
+
+Stage 1 decode_special
+- product-side operands finite
+- addend finite
+- selected_path = finite_path
+
+Stage 1 finite_product
+- prodSig_exact =
+  0x477b4fdcfcccf417bc6a4e8803cbab466adf1b6c
+- prodExp2 = -829
+
+Stage 1 add_normalize
+- addend_sig = 0x1ed60d9d59c2ca
+- addend_exp2 = 833
+- min_exp2 = -829
+- the exact combined sum is positive and overwhelmingly dominated by `d`
+
+Stage 2 round_register
+- round_sExp_r = 0x0b75
+- round_sig_r  = 0x7b583675670b28
+
+Stage 3 output
+- out_recfn = 0x0b75ed60d9d59c2ca
+- out_shell = 0x0b75ed60d9d59c2ca
+- flags     = 0x01
+
+Interpretation
+- the final rounded result lands back on the addend `d`
+- `inexact = 1` because the product contribution is not exactly representable after the huge exponent difference
+
+
+Random Example 4: TripleAddPipe_l4_f32
+--------------------------------------
+Unit:
+- TripleAddPipe_l4_f32
+
+IEEE inputs:
+- a = 0x62fe4af0
+- b = 0x07c63725
+- c = 0x1e683744
+
+What stands out immediately:
+- `a` is much larger than `b` and `c`
+- the final answer is dominated by `a`
+
+Stage 0: wrapper capture
+- a shell = 0x000000000a37e4af0
+- b shell = 0x00000000048463725
+- c shell = 0x0000000005ee83744
+
+Stage 1 decode_special
+- all finite
+- selected_path = finite_path
+
+Stage 1 align
+- shiftA = 182
+- shiftB = 0
+- shiftC = 45
+- this is a good example of how far apart exponents can be even in f32
+
+Stage 1 accumulate
+- sumSigned =
+  0x0fe4af00000000000000000000000000000741ba200000318dc94
+- selected_sign = 0
+
+Stage 1 normalize_raw
+- msbIdx = 207
+- normalization_path = right_shift_sticky
+- shiftAmt = 181
+- narrowedSig = 0x7f25781
+- raw_sExp = 0x145
+
+Stage 3 output
+- out_recfn = 0x0a37e4af0
+- out_shell = 0x000000000a37e4af0
+- flags     = 0x01
+
+Interpretation
+- result rounds back to operand `a`
+- `inexact = 1`
+
+
+Random Example 5: TripleMulPipe_l4_f32
+--------------------------------------
+Unit:
+- TripleMulPipe_l4_f32
+
+IEEE inputs:
+- a = 0x3044031b
+- b = 0x0d33625c
+- c = 0x10275823
+
+What stands out immediately:
+- the three finite numbers multiply down into the underflow range
+
+Stage 0: wrapper capture
+- all operands finite and positive
+
+Stage 1 decode_special
+- selected_path = finite_path
+
+Stage 1 finite_product
+- prod = 0x59c8a91bca3507b19c
+- scaledSig = 0x059c8a91
+- rawExpInt_pre_norm = 29
+
+Stage 1 normalize_raw
+- normalization_path = no_shift
+- raw_sExp = 0x01d
+- raw_sig  = 0x59c8a91
+
+Stage 3 output
+- out_recfn = 0x000000000
+- out_shell = 0x00000000000000000
+- out_class = zero
+- flags     = 0x03
+
+Interpretation
+- underflow = 1
+- inexact   = 1
+- the final rounded result becomes zero
+
+
+Random Example 6: TripleMulAddPipe_l4_f32
+-----------------------------------------
+Unit:
+- TripleMulAddPipe_l4_f32
+
+IEEE inputs:
+- a = 0x1f491020
+- b = 0xe22aca85
+- c = 0x62fe4af0
+- d = 0x3044031b
+
+What stands out immediately:
+- the product term is negative
+- the final result is finite and inexact
+
+Stage 0: wrapper capture
+- a sign = 0
+- b sign = 1
+- c sign = 0
+- d sign = 0
+- product sign should be negative
+
+Stage 1 decode_special
+- selected_path = finite_path
+- prod_sign = 1
+
+Stage 1 finite_product
+- prodSig_exact = 0x853ec0fe1380e4d600
+- prodExp2 = 5
+
+Stage 1 add_normalize
+- addend_sig = 0xc4031b
+- addend_exp2 = -54
+- min_exp2 = -54
+- sum_exact =
+  0x429f607f09c0726afffffffffff3bfce5
+- sum_sign = 1
+
+Stage 2 round_register
+- round_sExp_r = 0x14c
+- round_sig_r  = 0x214fb04
+
+Stage 3 output
+- out_recfn = 0x1a6053ec1
+- out_shell = 0x000000001a6053ec1
+- flags     = 0x01
+
+Interpretation
+- inexact = 1
+- final result is finite
+- this is a good example where the multiply-add path does not collapse to one operand or to a special value
+
+
+What To Notice Across These Random Cases
+----------------------------------------
+1. Random inputs often produce nonzero flags even when the final result looks simple.
+
+2. Add units are often dominated by the largest-magnitude operand after alignment.
+
+3. Multiply units naturally expose overflow and underflow more often than the clean integer-like examples.
+
+4. Multiply-add units show why preserving exact intermediate information matters:
+   a huge product or a huge addend can dominate the final rounded result, but the losing term can still matter for `inexact`.
+
+5. The pipeline shape does not change:
+   the same stage naming and data flow still apply even when the arithmetic becomes much more extreme.
+
+
+How These Examples Were Generated
+---------------------------------
+These walkthroughs were derived from the Python staged models under:
+
+- /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models
+
+Representative commands:
+
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_add_f64 --input-format ieee --rm rne --a 0x9aca0a72e6ec7c16 --b 0x5f8611e1d23fb0d0 --c 0x5bf1130b6fbf6296
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_f64 --input-format ieee --rm rne --a 0xeef6610bc7758cd4 --b 0x3b1d49248368f12e --c 0x6d3c7ac5c82157d5
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_add_f64 --input-format ieee --rm rne --a 0x302e191e58b4c609 --b 0x476f3fac7873f854 --c 0x9e4374d869cf1777 --d 0x774ed60d9d59c2ca
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_add_f32 --input-format ieee --rm rne --a 0x62fe4af0 --b 0x07c63725 --c 0x1e683744
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_f32 --input-format ieee --rm rne --a 0x3044031b --b 0x0d33625c --c 0x10275823
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_add_f32 --input-format ieee --rm rne --a 0x1f491020 --b 0xe22aca85 --c 0x62fe4af0 --d 0x3044031b

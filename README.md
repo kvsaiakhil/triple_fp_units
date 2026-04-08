@@ -39,8 +39,11 @@ Project navigation:
 
 - landing page: [PROJECT_SUMMARY.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/PROJECT_SUMMARY.md)
 - main spec: [TRIPLE_FP_UNITS_SPEC.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/TRIPLE_FP_UNITS_SPEC.md)
+- design constraints: [DESIGN_CONSTRAINTS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/DESIGN_CONSTRAINTS.md)
 - verification summary: [OFFLINE_VERIFICATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/OFFLINE_VERIFICATION.md)
 - diagrams page: [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BLOCK_DIAGRAMS.md)
+- examples: [examples/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/README.md)
+- HardFloat provenance: [HARDFLOAT_USAGE_AND_PROVENANCE.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/HARDFLOAT_USAGE_AND_PROVENANCE.md)
 - bug log: [BUG_REPORT_AND_FIXES.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BUG_REPORT_AND_FIXES.md)
 - command log: [COMMAND_HISTORY_DUMP.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/COMMAND_HISTORY_DUMP.md)
 - prompt log: [PROMPT_HISTORY_DUMP.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/PROMPT_HISTORY_DUMP.md)
@@ -52,6 +55,10 @@ Project navigation:
 - build the arithmetic raw cores from scratch instead of chaining top-level FMA wrappers
 - provide strong standalone verification
 - provide readable Python reference/debug models for understanding the datapath
+
+Detailed constraint list:
+
+- [DESIGN_CONSTRAINTS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/DESIGN_CONSTRAINTS.md)
 
 ## Pipeline Shape
 
@@ -213,6 +220,28 @@ brew install verilator svlint python
   useful for alternate lightweight simulation
 - Questa, VCS, or Xcelium
   useful if you want functional coverage collection from the `uvm_lite/` environment
+
+## External References
+
+This project sits on top of the BOOM / Chipyard / HardFloat ecosystem. Helpful official references are:
+
+- Chipyard repository: [ucb-bar/chipyard](https://github.com/ucb-bar/chipyard)
+- Chipyard docs: [chipyard.readthedocs.io](https://chipyard.readthedocs.io/)
+- BOOM repository: [riscv-boom/riscv-boom](https://github.com/riscv-boom/riscv-boom)
+- BOOM docs and publications: [boom-core.org](https://boom-core.org/)
+- Berkeley HardFloat repository mirror used in this project: [ucb-bar/berkeley-hardfloat](https://github.com/ucb-bar/berkeley-hardfloat)
+- Official Berkeley HardFloat overview: [jhauser.us/arithmetic/HardFloat.html](https://www.jhauser.us/arithmetic/HardFloat.html)
+- HardFloat Verilog module documentation: [HardFloat-Verilog.html](https://www.jhauser.us/arithmetic/HardFloat-1/doc/HardFloat-Verilog.html)
+
+Recommended citation style taken from project-maintained sources:
+
+- Chipyard: cite the IEEE Micro 2020 Chipyard paper by Amid et al. as recommended in the Chipyard README.
+- BOOM / SonicBOOM: cite the SonicBOOM 2020 CARRV workshop paper by Zhao et al. as recommended in the BOOM README.
+- HardFloat: the repository README does not publish a project BibTeX block, so this repo references HardFloat using the official Berkeley HardFloat documentation by John R. Hauser and the project/release pages.
+
+For project-specific provenance details, see:
+
+- [HARDFLOAT_USAGE_AND_PROVENANCE.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/HARDFLOAT_USAGE_AND_PROVENANCE.md)
 
 ## Environment Setup
 
@@ -492,6 +521,13 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
   --c 0x4008000000000000 \
   --d 0x4010000000000000
 ```
+
+More runnable examples:
+
+- [examples/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/README.md)
+- [quickstart_commands.sh](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/quickstart_commands.sh)
+- [STAGE_BY_STAGE_EXAMPLES.txt](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/STAGE_BY_STAGE_EXAMPLES.txt)
+- [RANDOM_STAGE_BY_STAGE_EXAMPLES.txt](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/RANDOM_STAGE_BY_STAGE_EXAMPLES.txt)
 
 ## Best Entry Points
 

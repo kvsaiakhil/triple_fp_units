@@ -1,0 +1,456 @@
+Stage-By-Stage Examples
+=======================
+
+Purpose
+-------
+This file gives one worked example for each implemented standalone FP unit.
+It is meant to help a new user understand:
+
+- the input format at a practical level
+- what each visible pipeline stage is doing
+- how the final recFN output is produced
+
+The examples below use the same simple values on purpose:
+
+- add examples: 1 + 2 + 3 = 6
+- multiply examples: 1 * 2 * 3 = 6
+- multiply-add examples: 1 * 2 * 3 + 4 = 10
+
+All examples use rounding mode:
+
+- rne = round to nearest, ties to even
+
+
+Quick Format Notes
+------------------
+This repo uses recFN-style floating-point values carried in the BOOM / HardFloat shell.
+
+For f64:
+
+- shell width = 65 bits
+- active value = full 65 bits
+
+For f32:
+
+- external shell width = 65 bits
+- active recFN value = low 33 bits
+- upper shell bits are zero in these standalone wrappers
+
+Important stage names used in the examples:
+
+- stage0_capture
+  wrapper input register
+- stage1_decode_special
+  classify zero / inf / NaN and choose special or finite path
+- stage1_align or stage1_finite_product
+  prepare the finite arithmetic
+- stage1_accumulate or stage1_add_normalize or stage1_normalize_raw
+  finish the exact finite arithmetic and shape the raw pre-round result
+- stage2_round_register
+  register the raw bundle that goes into the HardFloat rounder
+- stage3_output
+  final packed recFN output and exception flags
+
+
+Example 1: TripleAddPipe_l4_f64
+-------------------------------
+Unit:
+- TripleAddPipe_l4_f64
+
+Operation:
+- a + b + c
+
+IEEE inputs:
+- a = 1.0  = 0x3ff0000000000000
+- b = 2.0  = 0x4000000000000000
+- c = 3.0  = 0x4008000000000000
+
+Expected mathematical result:
+- 6.0
+
+Stage 0: wrapper capture
+- a recFN shell = 0x08000000000000000
+- b recFN shell = 0x08010000000000000
+- c recFN shell = 0x08018000000000000
+- finite exponents in the model:
+  a exp2 = -52
+  b exp2 = -51
+  c exp2 = -51
+
+Stage 1 decode_special
+- all three operands are finite
+- selected_path = finite_path
+- invalidExc = false
+
+Stage 1 align
+- minExp = 0x800
+- sigA_ext = 0x40000000000000
+- sigB_ext = 0x40000000000000
+- sigC_ext = 0x60000000000000
+- shiftA = 0
+- shiftB = 1
+- shiftC = 1
+- aligned values:
+  wideA = 0x40000000000000
+  wideB = 0x80000000000000
+  wideC = 0x0c0000000000000
+
+Stage 1 accumulate
+- sumSigned = 0x180000000000000
+- selected_sign = 0
+- exact_zero = false
+
+Stage 1 normalize_raw
+- absSum = 0x180000000000000
+- msbIdx = 56
+- normalization_path = right_shift_sticky
+- shiftAmt = 1
+- narrowedSig = 0xc0000000000000
+- raw_sExp = 0x0801
+- raw_sig  = 0xc0000000000000
+
+Stage 2 round_register
+- round_sign_r = 0
+- round_sExp_r = 0x0801
+- round_sig_r  = 0xc0000000000000
+
+Stage 3 output
+- out_recfn = 0x08028000000000000
+- out_shell = 0x08028000000000000
+- out_class = finite
+- flags     = 0x00
+
+Final meaning:
+- 6.0
+
+
+Example 2: TripleMulPipe_l4_f64
+-------------------------------
+Unit:
+- TripleMulPipe_l4_f64
+
+Operation:
+- a * b * c
+
+IEEE inputs:
+- a = 1.0  = 0x3ff0000000000000
+- b = 2.0  = 0x4000000000000000
+- c = 3.0  = 0x4008000000000000
+
+Expected mathematical result:
+- 6.0
+
+Stage 0: wrapper capture
+- a recFN shell = 0x08000000000000000
+- b recFN shell = 0x08010000000000000
+- c recFN shell = 0x08018000000000000
+
+Stage 1 decode_special
+- all three operands are finite
+- selected_path = finite_path
+- sign_r = 0
+
+Stage 1 finite_product
+- sigA = 0x10000000000000
+- sigB = 0x10000000000000
+- sigC = 0x18000000000000
+- exact product =
+  0x1800000000000000000000000000000000000000
+- BASE_SHIFT = 102
+- scaledSig = 0x060000000000000
+- rawExpInt_pre_norm = 2050
+
+Stage 1 normalize_raw
+- msbIdx = 54
+- normalization_path = no_shift
+- raw_sExp = 0x0802
+- raw_sig  = 0x60000000000000
+
+Stage 2 round_register
+- round_sign_r = 0
+- round_sExp_r = 0x0802
+- round_sig_r  = 0x60000000000000
+
+Stage 3 output
+- out_recfn = 0x08028000000000000
+- out_shell = 0x08028000000000000
+- out_class = finite
+- flags     = 0x00
+
+Final meaning:
+- 6.0
+
+
+Example 3: TripleMulAddPipe_l4_f64
+----------------------------------
+Unit:
+- TripleMulAddPipe_l4_f64
+
+Operation:
+- a * b * c + d
+
+IEEE inputs:
+- a = 1.0  = 0x3ff0000000000000
+- b = 2.0  = 0x4000000000000000
+- c = 3.0  = 0x4008000000000000
+- d = 4.0  = 0x4010000000000000
+
+Expected mathematical result:
+- 10.0
+
+Stage 0: wrapper capture
+- a recFN shell = 0x08000000000000000
+- b recFN shell = 0x08010000000000000
+- c recFN shell = 0x08018000000000000
+- d recFN shell = 0x08020000000000000
+
+Stage 1 decode_special
+- product-side operands are finite
+- d is finite
+- selected_path = finite_path
+
+Stage 1 finite_product
+- sigA = 0x10000000000000
+- sigB = 0x10000000000000
+- sigC = 0x18000000000000
+- prodSig_exact =
+  0x1800000000000000000000000000000000000000
+- prodExp2 = -154
+
+Stage 1 add_normalize
+- addend_sig = 0x10000000000000
+- addend_exp2 = -50
+- min_exp2 = -154
+- sum_exact =
+  0x2800000000000000000000000000000000000000
+- sum_sign = 0
+
+Stage 2 round_register
+- round_sign_r = 0
+- round_sExp_r = 0x0803
+- round_sig_r  = 0x50000000000000
+
+Stage 3 output
+- out_recfn = 0x08034000000000000
+- out_shell = 0x08034000000000000
+- out_class = finite
+- flags     = 0x00
+
+Final meaning:
+- 10.0
+
+
+Example 4: TripleAddPipe_l4_f32
+-------------------------------
+Unit:
+- TripleAddPipe_l4_f32
+
+Operation:
+- a + b + c
+
+IEEE inputs:
+- a = 1.0 = 0x3f800000
+- b = 2.0 = 0x40000000
+- c = 3.0 = 0x40400000
+
+Expected mathematical result:
+- 6.0
+
+Stage 0: wrapper capture
+- a shell = 0x00000000080000000
+- b shell = 0x00000000080800000
+- c shell = 0x00000000080c00000
+- active recFN is the low 33 bits
+
+Stage 1 decode_special
+- all three operands are finite
+- selected_path = finite_path
+
+Stage 1 align
+- minExp = 0x100
+- sigA_ext = 0x2000000
+- sigB_ext = 0x2000000
+- sigC_ext = 0x3000000
+- shiftA = 0
+- shiftB = 1
+- shiftC = 1
+- aligned values:
+  wideA = 0x2000000
+  wideB = 0x4000000
+  wideC = 0x6000000
+
+Stage 1 accumulate
+- sumSigned = 0x0c000000
+- selected_sign = 0
+
+Stage 1 normalize_raw
+- absSum = 0x0c000000
+- msbIdx = 27
+- normalization_path = right_shift_sticky
+- shiftAmt = 1
+- narrowedSig = 0x6000000
+- raw_sExp = 0x101
+- raw_sig  = 0x6000000
+
+Stage 2 round_register
+- round_sign_r = 0
+- round_sExp_r = 0x101
+- round_sig_r  = 0x6000000
+
+Stage 3 output
+- out_recfn = 0x081400000
+- out_shell = 0x00000000081400000
+- out_class = finite
+- flags     = 0x00
+
+Final meaning:
+- 6.0
+
+
+Example 5: TripleMulPipe_l4_f32
+-------------------------------
+Unit:
+- TripleMulPipe_l4_f32
+
+Operation:
+- a * b * c
+
+IEEE inputs:
+- a = 1.0 = 0x3f800000
+- b = 2.0 = 0x40000000
+- c = 3.0 = 0x40400000
+
+Expected mathematical result:
+- 6.0
+
+Stage 0: wrapper capture
+- a shell = 0x00000000080000000
+- b shell = 0x00000000080800000
+- c shell = 0x00000000080c00000
+
+Stage 1 decode_special
+- all three operands are finite
+- selected_path = finite_path
+
+Stage 1 finite_product
+- sigA = 0x800000
+- sigB = 0x800000
+- sigC = 0xc00000
+- prod = 0x300000000000000000
+- BASE_SHIFT = 44
+- scaledSig = 0x03000000
+- rawExpInt_pre_norm = 258
+
+Stage 1 normalize_raw
+- msbIdx = 25
+- normalization_path = no_shift
+- raw_sExp = 0x102
+- raw_sig  = 0x3000000
+
+Stage 2 round_register
+- round_sign_r = 0
+- round_sExp_r = 0x102
+- round_sig_r  = 0x3000000
+
+Stage 3 output
+- out_recfn = 0x081400000
+- out_shell = 0x00000000081400000
+- out_class = finite
+- flags     = 0x00
+
+Final meaning:
+- 6.0
+
+
+Example 6: TripleMulAddPipe_l4_f32
+----------------------------------
+Unit:
+- TripleMulAddPipe_l4_f32
+
+Operation:
+- a * b * c + d
+
+IEEE inputs:
+- a = 1.0 = 0x3f800000
+- b = 2.0 = 0x40000000
+- c = 3.0 = 0x40400000
+- d = 4.0 = 0x40800000
+
+Expected mathematical result:
+- 10.0
+
+Stage 0: wrapper capture
+- a shell = 0x00000000080000000
+- b shell = 0x00000000080800000
+- c shell = 0x00000000080c00000
+- d shell = 0x00000000081000000
+
+Stage 1 decode_special
+- product-side operands are finite
+- d is finite
+- selected_path = finite_path
+
+Stage 1 finite_product
+- sigA = 0x800000
+- sigB = 0x800000
+- sigC = 0xc00000
+- prodSig_exact = 0x300000000000000000
+- prodExp2 = -67
+
+Stage 1 add_normalize
+- addend_sig = 0x800000
+- addend_exp2 = -21
+- min_exp2 = -67
+- sum_exact = 0x500000000000000000
+- sum_sign = 0
+
+Stage 2 round_register
+- round_sign_r = 0
+- round_sExp_r = 0x103
+- round_sig_r  = 0x2800000
+
+Stage 3 output
+- out_recfn = 0x081a00000
+- out_shell = 0x00000000081a00000
+- out_class = finite
+- flags     = 0x00
+
+Final meaning:
+- 10.0
+
+
+What To Notice Across All Examples
+----------------------------------
+1. The visible pipeline contract is consistent across all units:
+   stage0 capture -> stage1 arithmetic shaping -> stage2 round register -> stage3 final output
+
+2. The add units spend their main effort in:
+   alignment + signed accumulation
+
+3. The multiply units spend their main effort in:
+   exact product + normalization
+
+4. The multiply-add units combine both ideas:
+   exact triple product first, then add the fourth operand, then normalize once
+
+5. For these simple exact examples:
+   the final flags are all zero
+
+6. The f32 and f64 paths look structurally the same:
+   the main difference is width
+
+
+Where These Numbers Came From
+-----------------------------
+These walkthrough values were taken from the Python staged reference models in:
+
+- /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models
+
+Useful commands:
+
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_add_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_add_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000 --d 0x4010000000000000
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_add_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000
+- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_add_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000 --d 0x40800000
