@@ -17,6 +17,14 @@ These examples are useful for understanding:
 - why `inexact`, `overflow`, and `underflow` may appear
 - how the pre-round raw bundle still fits the same pipeline contract
 
+Reading note
+------------
+For visual verification:
+
+- stage0 shows the user-facing IEEE inputs in both hex and decimal
+- stage3 shows the final user-visible result in both IEEE and decimal
+- internal stage bundles are still shown in the native recFN/raw hex style, because those are pre-round implementation values rather than ordinary IEEE numbers
+
 Random selection note
 ---------------------
 The example inputs below were chosen from a deterministic random stream using seed:
@@ -55,6 +63,11 @@ IEEE inputs:
 - a = 0x9aca0a72e6ec7c16
 - b = 0x5f8611e1d23fb0d0
 - c = 0x5bf1130b6fbf6296
+
+Decimal inputs:
+- a = -1.2551255843633228e-179
+- b =  1.444864925700863e+152
+- c =  7.756456383311148e+134
 
 What stands out immediately:
 - `b` is enormous compared to `a`
@@ -106,6 +119,10 @@ Stage 3 output
 - out_shell = 0x09f9611e1d23fb0d0
 - flags     = 0x01
 
+Final output, user-visible form
+- IEEE hex = 0x5f8611e1d23fb0d0
+- decimal  = 1.444864925700863e+152
+
 Interpretation
 - the result rounds back to operand `b`
 - flags show `inexact = 1`
@@ -121,6 +138,11 @@ IEEE inputs:
 - a = 0xeef6610bc7758cd4
 - b = 0x3b1d49248368f12e
 - c = 0x6d3c7ac5c82157d5
+
+Decimal inputs:
+- a = -3.3134399300999864e+226
+- b =  6.0561435871193276e-24
+- c =  1.5708346214137027e+218
 
 What stands out immediately:
 - the product grows so large that it overflows
@@ -160,6 +182,10 @@ Stage 3 output
 - out_class = inf
 - flags     = 0x05
 
+Final output, user-visible form
+- IEEE hex = 0xfff0000000000000
+- decimal  = -inf
+
 Interpretation
 - overflow = 1
 - inexact  = 1
@@ -176,6 +202,12 @@ IEEE inputs:
 - b = 0x476f3fac7873f854
 - c = 0x9e4374d869cf1777
 - d = 0x774ed60d9d59c2ca
+
+Decimal inputs:
+- a =  1.299662157372602e-76
+- b =  1.2980212715357001e+36
+- c = -6.75733496936718e-163
+- d =  4.9714864786460757e+266
 
 What stands out immediately:
 - the addend `d` is much larger than the triple product term
@@ -212,6 +244,10 @@ Stage 3 output
 - out_shell = 0x0b75ed60d9d59c2ca
 - flags     = 0x01
 
+Final output, user-visible form
+- IEEE hex = 0x774ed60d9d59c2ca
+- decimal  = 4.9714864786460757e+266
+
 Interpretation
 - the final rounded result lands back on the addend `d`
 - `inexact = 1` because the product contribution is not exactly representable after the huge exponent difference
@@ -226,6 +262,11 @@ IEEE inputs:
 - a = 0x62fe4af0
 - b = 0x07c63725
 - c = 0x1e683744
+
+Decimal inputs:
+- a = 2.3454364053377217e+21
+- b = 2.9824139869721614e-34
+- c = 1.2293406398572511e-20
 
 What stands out immediately:
 - `a` is much larger than `b` and `c`
@@ -263,6 +304,10 @@ Stage 3 output
 - out_shell = 0x000000000a37e4af0
 - flags     = 0x01
 
+Final output, user-visible form
+- IEEE hex = 0x62fe4af0
+- decimal  = 2.3454364053377217e+21
+
 Interpretation
 - result rounds back to operand `a`
 - `inexact = 1`
@@ -277,6 +322,11 @@ IEEE inputs:
 - a = 0x3044031b
 - b = 0x0d33625c
 - c = 0x10275823
+
+Decimal inputs:
+- a = 7.130879775552046e-10
+- b = 5.527702939826526e-31
+- c = 3.300284085131351e-29
 
 What stands out immediately:
 - the three finite numbers multiply down into the underflow range
@@ -303,6 +353,10 @@ Stage 3 output
 - out_class = zero
 - flags     = 0x03
 
+Final output, user-visible form
+- IEEE hex = 0x00000000
+- decimal  = 0.0
+
 Interpretation
 - underflow = 1
 - inexact   = 1
@@ -319,6 +373,12 @@ IEEE inputs:
 - b = 0xe22aca85
 - c = 0x62fe4af0
 - d = 0x3044031b
+
+Decimal inputs:
+- a =  4.257674388690601e-20
+- b = -7.876348906745469e+20
+- c =  2.3454364053377217e+21
+- d =  7.130879775552046e-10
 
 What stands out immediately:
 - the product term is negative
@@ -355,6 +415,10 @@ Stage 3 output
 - out_recfn = 0x1a6053ec1
 - out_shell = 0x000000001a6053ec1
 - flags     = 0x01
+
+Final output, user-visible form
+- IEEE hex = 0xe6053ec1
+- decimal  = -1.5730808686747053e+23
 
 Interpretation
 - inexact = 1
