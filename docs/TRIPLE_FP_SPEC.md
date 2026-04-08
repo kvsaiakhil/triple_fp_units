@@ -31,12 +31,12 @@ The original FMA path has 4 registered stages at the interface:
 3. inner pipe stage 1
 4. wrapper output capture
 
-This was validated against:
+This was validated against the corresponding files in the parent BOOM workspace root:
 
-- `/Users/kvsaiakhil/Projects/BoomV3/FPUFMAPipe_l4_f64.sv`
-- `/Users/kvsaiakhil/Projects/BoomV3/FPUFMAPipe_l4_f32.sv`
-- `/Users/kvsaiakhil/Projects/BoomV3/MulAddRecFNPipe_l2_e11_s53.sv`
-- `/Users/kvsaiakhil/Projects/BoomV3/MulAddRecFNPipe_l2_e8_s24.sv`
+- `FPUFMAPipe_l4_f64.sv`
+- `FPUFMAPipe_l4_f32.sv`
+- `MulAddRecFNPipe_l2_e11_s53.sv`
+- `MulAddRecFNPipe_l2_e8_s24.sv`
 
 The new units must preserve the same external valid timing:
 

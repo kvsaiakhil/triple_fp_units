@@ -156,8 +156,8 @@ module tb_triple_fp_random_f64;
     repeat (3) @(posedge clock);
     reset = 1'b0;
 
-    run_file("/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f64_add.txt", 1'b0);
-    run_file("/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f64_mul.txt", 1'b1);
+    run_file("verif/vectors/vectors_f64_add.txt", 1'b0);
+    run_file("verif/vectors/vectors_f64_mul.txt", 1'b1);
 
     $display("tb_triple_fp_random_f64 PASS (%0d checks)", tests);
     $finish;

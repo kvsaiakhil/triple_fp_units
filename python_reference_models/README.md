@@ -16,6 +16,14 @@ The goal is understanding first:
 - expose the main intermediate values from each raw combinational substage
 - provide a software reference result for the final output and exception flags
 
+Assumed shell variables:
+
+```sh
+export BOOMV3_ROOT=/path/to/BoomV3
+export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+cd "$REPO_ROOT"
+```
+
 ## Files
 
 - `triple_fp_reference_lib.py`
@@ -95,7 +103,7 @@ So the raw-stage debug values are designed to line up with the RTL, while the fi
 ### Triple add, f64, IEEE inputs
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" \
   --unit triple_add_f64 \
   --input-format ieee \
   --rm rne \
@@ -107,7 +115,7 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
 ### Triple mul, f32, recFN-shell inputs
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" \
   --unit triple_mul_f32 \
   --input-format recfn \
   --rm rtz \
@@ -119,7 +127,7 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
 ### Triple mul-add, f64, IEEE inputs
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" \
   --unit triple_mul_add_f64 \
   --input-format ieee \
   --rm rne \
@@ -134,7 +142,7 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
 To run the lightweight local check against the existing verification vectors:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/test_reference_models.py
+python3 "$REPO_ROOT/python_reference_models/test_reference_models.py"
 ```
 
 That script samples the existing vector files and checks that the Python model output matches the expected result/class and exception flags.

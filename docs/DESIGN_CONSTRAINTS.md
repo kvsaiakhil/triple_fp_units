@@ -73,7 +73,7 @@ It covers the original triple-add and triple-multiply units, and the later tripl
   - verification flows
   - Python reference models
   - provenance of HardFloat-related ideas and dependencies
-- The root of the repo should remain readable, with the detailed project docs placed under [docs](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs).
+- The root of the repo should remain readable, with the detailed project docs placed under [docs](./).
 
 ## 9. Practical Constraints Found During Implementation
 

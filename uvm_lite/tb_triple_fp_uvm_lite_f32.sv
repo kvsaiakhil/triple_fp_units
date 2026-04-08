@@ -36,8 +36,8 @@ module tb_triple_fp_uvm_lite_f32;
 
   triple_fp_uvm_lite_env #(
     .PRECISION(32),
-    .ADD_VECTOR_PATH("/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f32_add.txt"),
-    .MUL_VECTOR_PATH("/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f32_mul.txt")
+    .ADD_VECTOR_PATH("verif/vectors/vectors_f32_add.txt"),
+    .MUL_VECTOR_PATH("verif/vectors/vectors_f32_mul.txt")
   ) env (
     .clock(clock),
     .reset(reset),

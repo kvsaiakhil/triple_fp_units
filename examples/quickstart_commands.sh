@@ -1,10 +1,15 @@
+#!/usr/bin/env bash
 # Quickstart command examples for the standalone triple-FP repo.
 # Copy and paste the commands you want to run.
 
-cd /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+BOOMV3_ROOT="$(cd -- "${REPO_ROOT}/.." && pwd)"
+
+cd "${REPO_ROOT}"
 
 # 1. Python reference model for triple multiply-add, f64.
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "${REPO_ROOT}/python_reference_models/run_reference_model.py" \
   --unit triple_mul_add_f64 \
   --input-format ieee \
   --rm rne \
@@ -16,31 +21,31 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
 # 2. Directed f64 bench for triple multiply-add.
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_f64 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f64 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f64/Vtb_triple_mul_add_f64
+  -Mdir "${REPO_ROOT}/obj_dir_quad_f64" \
+  "${REPO_ROOT}/tb_triple_mul_add_f64.sv" \
+  "${REPO_ROOT}/TripleMulAddPipe_l4_f64.sv" \
+  "${REPO_ROOT}/TripleMulAddRecFNPipe_l2.sv" \
+  "${REPO_ROOT}/TripleMulAddRecFNToRaw.sv" \
+  "${BOOMV3_ROOT}/INToRecFN_i64_e11_s53.sv" \
+  "${BOOMV3_ROOT}/RoundRawFNToRecFN_e11_s53.sv" \
+  "${BOOMV3_ROOT}/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
+  "${BOOMV3_ROOT}/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
+"${REPO_ROOT}/obj_dir_quad_f64/Vtb_triple_mul_add_f64"
 
 # 3. Generate random vectors for the triple multiply-add family.
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_mul_add_vectors.py --n 4096
+python3 "${REPO_ROOT}/verif/generate_triple_mul_add_vectors.py" --n 4096
 
 # 4. Deep random replay for triple multiply-add, f64.
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_random_f64 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64
+  -Mdir "${REPO_ROOT}/obj_dir_muladd_rand_f64" \
+  "${REPO_ROOT}/verif/tb_triple_mul_add_random_f64.sv" \
+  "${REPO_ROOT}/TripleMulAddPipe_l4_f64.sv" \
+  "${REPO_ROOT}/TripleMulAddRecFNPipe_l2.sv" \
+  "${REPO_ROOT}/TripleMulAddRecFNToRaw.sv" \
+  "${BOOMV3_ROOT}/RoundRawFNToRecFN_e11_s53.sv" \
+  "${BOOMV3_ROOT}/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+"${REPO_ROOT}/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64"
 
 # 5. Python sanity-check sweep across the available units.
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/test_reference_models.py
+python3 "${REPO_ROOT}/python_reference_models/test_reference_models.py"

@@ -7,8 +7,8 @@ import random
 import sys
 from pathlib import Path
 
-ROOT = Path("/Users/kvsaiakhil/Projects/BoomV3")
-PY_REF_DIR = ROOT / "triple_fp_units/python_reference_models"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+PY_REF_DIR = REPO_ROOT / "python_reference_models"
 if str(PY_REF_DIR) not in sys.path:
     sys.path.insert(0, str(PY_REF_DIR))
 
@@ -20,7 +20,7 @@ from triple_fp_reference_lib import (
     decode_recfn,
     recode_from_ieee,
 )
-OUT_DIR = ROOT / "triple_fp_units/verif/vectors"
+OUT_DIR = REPO_ROOT / "verif" / "vectors"
 
 
 def ieee_hex(bits: int, width_bits: int) -> str:

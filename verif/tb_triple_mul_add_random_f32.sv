@@ -96,7 +96,7 @@ module tb_triple_mul_add_random_f32;
     repeat (3) @(posedge clock);
     reset = 1'b0;
 
-    fd = $fopen("/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f32_muladd.txt", "r");
+    fd = $fopen("verif/vectors/vectors_f32_muladd.txt", "r");
     if (fd == 0) $fatal(1, "failed to open muladd f32 vectors");
     while (!$feof(fd)) begin
       rc = $fscanf(fd, "%h %h %h %h %h %h %h %h\n", mode, cmp_mode, exp_in1, exp_in2, exp_in3, exp_in4, exp_out, exp_exc);

@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Any
 
 
-ROOT = Path("/Users/kvsaiakhil/Projects/BoomV3")
-VECTOR_DIR = ROOT / "triple_fp_units/verif/vectors"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+VECTOR_DIR = REPO_ROOT / "verif" / "vectors"
 
 ROUNDING_NAMES = {
     0: "rne",

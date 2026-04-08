@@ -7,9 +7,10 @@ from pathlib import Path
 from typing import Iterable
 
 
-ROOT = Path("/Users/kvsaiakhil/Projects/BoomV3")
-TESTFLOAT_GEN = ROOT / "berkeley-hardfloat/berkeley-testfloat-3/build/Linux-x86_64-GCC/testfloat_gen"
-OUT_DIR = ROOT / "triple_fp_units/verif/vectors"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+BOOMV3_ROOT = REPO_ROOT.parent
+TESTFLOAT_GEN = BOOMV3_ROOT / "berkeley-hardfloat" / "berkeley-testfloat-3" / "build" / "Linux-x86_64-GCC" / "testfloat_gen"
+OUT_DIR = REPO_ROOT / "verif" / "vectors"
 
 ROUNDING_MODES = [0, 1, 2, 3, 4, 6]
 SEEDS = [1, 2, 3, 7]

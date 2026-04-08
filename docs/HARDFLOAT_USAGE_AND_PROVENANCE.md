@@ -2,13 +2,13 @@
 
 This document explains what parts of Berkeley HardFloat were used directly or indirectly by the custom standalone units in this repo, and what parts were newly implemented here.
 
-It is meant to answer a simple question clearly:
+It answers a simple question:
 
-What in this project is HardFloat-derived infrastructure, and what in this project is our own custom arithmetic RTL?
+What in this project is HardFloat-derived infrastructure, and what is custom arithmetic RTL written for this repo?
 
 ## Executive Summary
 
-Directly used from the local HardFloat-generated environment:
+Directly used from the surrounding BOOM / HardFloat-generated environment:
 
 - existing rounders
 - existing recFN format conventions
@@ -29,32 +29,32 @@ Custom in this project:
 
 ## 1. Direct HardFloat-Related Dependencies
 
-The new units directly instantiate the existing rounder modules already present in the BOOM/Chipyard RTL tree:
+The new units directly instantiate the existing rounder modules already present in the parent BOOM workspace:
 
-- [RoundRawFNToRecFN_e11_s53.sv](/Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv)
-- [RoundRawFNToRecFN_e8_s24.sv](/Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv)
+- `RoundRawFNToRecFN_e11_s53.sv`
+- `RoundRawFNToRecFN_e8_s24.sv`
 
 Those rounders are used in:
 
-- [TripleAddRecFNPipe_l2.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNPipe_l2.sv)
-- [TripleMulRecFNPipe_l2.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNPipe_l2.sv)
-- [TripleMulAddRecFNPipe_l2.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv)
+- [TripleAddRecFNPipe_l2.sv](../TripleAddRecFNPipe_l2.sv)
+- [TripleMulRecFNPipe_l2.sv](../TripleMulRecFNPipe_l2.sv)
+- [TripleMulAddRecFNPipe_l2.sv](../TripleMulAddRecFNPipe_l2.sv)
 
-These modules are not reimplemented here. The project reuses them as existing infrastructure.
+These modules are not reimplemented here. The project reuses them as existing infrastructure from the BOOM / HardFloat tree.
 
 ## 2. Direct Testbench-Side HardFloat Dependencies
 
 The directed benches use the existing integer-to-recFN conversion modules for stimulus and exact integer references:
 
-- [INToRecFN_i64_e11_s53.sv](/Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e11_s53.sv)
-- [INToRecFN_i64_e8_s24.sv](/Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e8_s24.sv)
+- `INToRecFN_i64_e11_s53.sv`
+- `INToRecFN_i64_e8_s24.sv`
 
 These are used in:
 
-- [tb_triple_fp_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f64.sv)
-- [tb_triple_fp_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f32.sv)
-- [tb_triple_mul_add_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f64.sv)
-- [tb_triple_mul_add_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f32.sv)
+- [tb_triple_fp_f64.sv](../tb_triple_fp_f64.sv)
+- [tb_triple_fp_f32.sv](../tb_triple_fp_f32.sv)
+- [tb_triple_mul_add_f64.sv](../tb_triple_mul_add_f64.sv)
+- [tb_triple_mul_add_f32.sv](../tb_triple_mul_add_f32.sv)
 
 Again, these are reused as existing local infrastructure rather than rewritten.
 
@@ -85,9 +85,9 @@ The following were not copied as arithmetic implementations into the new standal
 
 In particular, the following files contain custom arithmetic logic written specifically for this project:
 
-- [TripleAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNToRaw.sv)
-- [TripleMulRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNToRaw.sv)
-- [TripleMulAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv)
+- [TripleAddRecFNToRaw.sv](../TripleAddRecFNToRaw.sv)
+- [TripleMulRecFNToRaw.sv](../TripleMulRecFNToRaw.sv)
+- [TripleMulAddRecFNToRaw.sv](../TripleMulAddRecFNToRaw.sv)
 
 Those files implement:
 

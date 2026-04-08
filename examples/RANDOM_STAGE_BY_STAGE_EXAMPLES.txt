@@ -5,7 +5,7 @@ Purpose
 -------
 This file is the companion to:
 
-- /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/STAGE_BY_STAGE_EXAMPLES.txt
+- examples/STAGE_BY_STAGE_EXAMPLES.txt
 
 The earlier file uses very clean integer-like examples such as 1, 2, 3, and 4.
 This file instead uses deterministic random finite IEEE values so a reader can see how the same units behave on less intuitive floating-point inputs.
@@ -445,13 +445,13 @@ How These Examples Were Generated
 ---------------------------------
 These walkthroughs were derived from the Python staged models under:
 
-- /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models
+- python_reference_models/
 
 Representative commands:
 
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_add_f64 --input-format ieee --rm rne --a 0x9aca0a72e6ec7c16 --b 0x5f8611e1d23fb0d0 --c 0x5bf1130b6fbf6296
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_f64 --input-format ieee --rm rne --a 0xeef6610bc7758cd4 --b 0x3b1d49248368f12e --c 0x6d3c7ac5c82157d5
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_add_f64 --input-format ieee --rm rne --a 0x302e191e58b4c609 --b 0x476f3fac7873f854 --c 0x9e4374d869cf1777 --d 0x774ed60d9d59c2ca
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_add_f32 --input-format ieee --rm rne --a 0x62fe4af0 --b 0x07c63725 --c 0x1e683744
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_f32 --input-format ieee --rm rne --a 0x3044031b --b 0x0d33625c --c 0x10275823
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_add_f32 --input-format ieee --rm rne --a 0x1f491020 --b 0xe22aca85 --c 0x62fe4af0 --d 0x3044031b
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_add_f64 --input-format ieee --rm rne --a 0x9aca0a72e6ec7c16 --b 0x5f8611e1d23fb0d0 --c 0x5bf1130b6fbf6296
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_mul_f64 --input-format ieee --rm rne --a 0xeef6610bc7758cd4 --b 0x3b1d49248368f12e --c 0x6d3c7ac5c82157d5
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_mul_add_f64 --input-format ieee --rm rne --a 0x302e191e58b4c609 --b 0x476f3fac7873f854 --c 0x9e4374d869cf1777 --d 0x774ed60d9d59c2ca
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_add_f32 --input-format ieee --rm rne --a 0x62fe4af0 --b 0x07c63725 --c 0x1e683744
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_mul_f32 --input-format ieee --rm rne --a 0x3044031b --b 0x0d33625c --c 0x10275823
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_mul_add_f32 --input-format ieee --rm rne --a 0x1f491020 --b 0xe22aca85 --c 0x62fe4af0 --d 0x3044031b

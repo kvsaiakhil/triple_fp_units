@@ -1,11 +1,19 @@
 # Offline Verification
 
-This environment has a working local HDL flow:
+This workspace was verified with a local HDL flow based on:
 
-- `verilator 5.046`
-- `svlint 0.9.5`
+- `verilator`
+- `svlint`
 
-The standalone floating-point units in this folder were compiled and simulated locally with Verilator in this workspace.
+The standalone floating-point units in this folder were compiled and simulated locally with Verilator.
+
+Assumed shell variables:
+
+```sh
+export BOOMV3_ROOT=/path/to/BoomV3
+export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+cd "$REPO_ROOT"
+```
 
 ## What Ships In This Folder
 
@@ -41,20 +49,20 @@ Structured replay:
 
 New RTL in this subproject:
 
-- `triple_fp_units/TripleAddRecFNToRaw.sv`
-- `triple_fp_units/TripleMulRecFNToRaw.sv`
-- `triple_fp_units/TripleMulAddRecFNToRaw.sv`
-- `triple_fp_units/TripleAddRecFNPipe_l2.sv`
-- `triple_fp_units/TripleMulRecFNPipe_l2.sv`
-- `triple_fp_units/TripleMulAddRecFNPipe_l2.sv`
-- `triple_fp_units/TripleAddPipe_l4_f64.sv`
-- `triple_fp_units/TripleMulPipe_l4_f64.sv`
-- `triple_fp_units/TripleMulAddPipe_l4_f64.sv`
-- `triple_fp_units/TripleAddPipe_l4_f32.sv`
-- `triple_fp_units/TripleMulPipe_l4_f32.sv`
-- `triple_fp_units/TripleMulAddPipe_l4_f32.sv`
+- `TripleAddRecFNToRaw.sv`
+- `TripleMulRecFNToRaw.sv`
+- `TripleMulAddRecFNToRaw.sv`
+- `TripleAddRecFNPipe_l2.sv`
+- `TripleMulRecFNPipe_l2.sv`
+- `TripleMulAddRecFNPipe_l2.sv`
+- `TripleAddPipe_l4_f64.sv`
+- `TripleMulPipe_l4_f64.sv`
+- `TripleMulAddPipe_l4_f64.sv`
+- `TripleAddPipe_l4_f32.sv`
+- `TripleMulPipe_l4_f32.sv`
+- `TripleMulAddPipe_l4_f32.sv`
 
-Existing repo dependencies:
+Existing parent-workspace dependencies:
 
 - `RoundRawFNToRecFN_e11_s53.sv`
 - `RoundRawFNToRecFN_e8_s24.sv`
@@ -67,8 +75,24 @@ Existing repo dependencies:
 
 ## Tool Install
 
+macOS:
+
 ```sh
-brew install verilator svlint python
+brew install verilator python svlint
+```
+
+Linux:
+
+```sh
+sudo apt update
+sudo apt install -y build-essential git python3 python3-pip verilator
+```
+
+Optional `svlint` on Linux:
+
+```sh
+sudo apt install -y cargo
+cargo install svlint
 ```
 
 ## Verified Local Flows
@@ -78,16 +102,16 @@ brew install verilator svlint python
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_f64 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f64 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f64/Vtb_triple_mul_add_f64
+  -Mdir "$REPO_ROOT/obj_dir_quad_f64" \
+  "$REPO_ROOT/tb_triple_mul_add_f64.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f64.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/INToRecFN_i64_e11_s53.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
+"$REPO_ROOT/obj_dir_quad_f64/Vtb_triple_mul_add_f64"
 ```
 
 Observed result:
@@ -99,16 +123,16 @@ Observed result:
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_f32 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f32 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f32/Vtb_triple_mul_add_f32
+  -Mdir "$REPO_ROOT/obj_dir_quad_f32" \
+  "$REPO_ROOT/tb_triple_mul_add_f32.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/INToRecFN_i64_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
+"$REPO_ROOT/obj_dir_quad_f32/Vtb_triple_mul_add_f32"
 ```
 
 Observed result:
@@ -120,7 +144,7 @@ Observed result:
 First regenerate vectors:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_mul_add_vectors.py --n 4096
+python3 "$REPO_ROOT/verif/generate_triple_mul_add_vectors.py" --n 4096
 ```
 
 Then run `f64`:
@@ -128,14 +152,14 @@ Then run `f64`:
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_random_f64 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64
+  -Mdir "$REPO_ROOT/obj_dir_muladd_rand_f64" \
+  "$REPO_ROOT/verif/tb_triple_mul_add_random_f64.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f64.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+"$REPO_ROOT/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64"
 ```
 
 Then run `f32`:
@@ -143,14 +167,14 @@ Then run `f32`:
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_random_f32 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f32 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32
+  -Mdir "$REPO_ROOT/obj_dir_muladd_rand_f32" \
+  "$REPO_ROOT/verif/tb_triple_mul_add_random_f32.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
+"$REPO_ROOT/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32"
 ```
 
 Observed results:

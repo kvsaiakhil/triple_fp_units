@@ -2,7 +2,7 @@
 
 This document collects the top-level block diagrams for the implemented units in one place.
 
-The same diagrams are mirrored in [README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/README.md).
+The same diagrams are mirrored in [README.md](../README.md).
 
 ## `TripleAddPipe_l4_f64`
 

@@ -1,9 +1,10 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="/Users/kvsaiakhil/Projects/BoomV3"
-UVM_LITE_DIR="${ROOT}/triple_fp_units/uvm_lite"
-TRIPLE_DIR="${ROOT}/triple_fp_units"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+TRIPLE_DIR="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
+ROOT="$(cd -- "${TRIPLE_DIR}/.." && pwd)"
+UVM_LITE_DIR="${TRIPLE_DIR}/uvm_lite"
 
 run_f64() {
   verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \

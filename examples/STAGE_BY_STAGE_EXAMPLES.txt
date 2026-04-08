@@ -444,13 +444,13 @@ Where These Numbers Came From
 -----------------------------
 These walkthrough values were taken from the Python staged reference models in:
 
-- /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models
+- python_reference_models/
 
 Useful commands:
 
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_add_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_add_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000 --d 0x4010000000000000
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_add_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000
-- python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py --unit triple_mul_add_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000 --d 0x40800000
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_add_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_mul_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_mul_add_f64 --input-format ieee --rm rne --a 0x3ff0000000000000 --b 0x4000000000000000 --c 0x4008000000000000 --d 0x4010000000000000
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_add_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_mul_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000
+- python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" --unit triple_mul_add_f32 --input-format ieee --rm rne --a 0x3f800000 --b 0x40000000 --c 0x40400000 --d 0x40800000

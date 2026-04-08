@@ -15,6 +15,14 @@ It is intentionally "UVM-lite":
 - scoreboard-style checking
 - functional coverage for arithmetic scenario closure
 
+Assumed shell variables:
+
+```sh
+export BOOMV3_ROOT=/path/to/BoomV3
+export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+cd "$REPO_ROOT"
+```
+
 ## Files
 
 - `triple_fp_uvm_lite_pkg.sv`
@@ -30,10 +38,10 @@ It is intentionally "UVM-lite":
 
 The environment reuses the existing Python/TestFloat-generated vector files in:
 
-- `/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f64_add.txt`
-- `/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f64_mul.txt`
-- `/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f32_add.txt`
-- `/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/vectors/vectors_f32_mul.txt`
+- `verif/vectors/vectors_f64_add.txt`
+- `verif/vectors/vectors_f64_mul.txt`
+- `verif/vectors/vectors_f32_add.txt`
+- `verif/vectors/vectors_f32_mul.txt`
 
 Component split:
 
@@ -77,7 +85,7 @@ The benches compile under Verilator. Covergroups are disabled automatically ther
 ### Quick run
 
 ```sh
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/run_uvm_lite_verilator.sh all
+"$REPO_ROOT/uvm_lite/run_uvm_lite_verilator.sh" all
 ```
 
 This supports `f64`, `f32`, or `all`.
@@ -87,22 +95,22 @@ This supports `f64`, `f32`, or `all`.
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_fp_uvm_lite_f64 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/obj_dir_f64 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/tb_triple_fp_uvm_lite_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_uvm_lite_pkg.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_req_if.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_rsp_if.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_uvm_lite_cov.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_uvm_lite_env.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddPipe_l4_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulPipe_l4_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/obj_dir_f64/Vtb_triple_fp_uvm_lite_f64
+  -Mdir "$REPO_ROOT/uvm_lite/obj_dir_f64" \
+  "$REPO_ROOT/uvm_lite/tb_triple_fp_uvm_lite_f64.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_uvm_lite_pkg.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_req_if.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_rsp_if.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_uvm_lite_cov.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_uvm_lite_env.sv" \
+  "$REPO_ROOT/TripleAddPipe_l4_f64.sv" \
+  "$REPO_ROOT/TripleAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleAddRecFNToRaw.sv" \
+  "$REPO_ROOT/TripleMulPipe_l4_f64.sv" \
+  "$REPO_ROOT/TripleMulRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+"$REPO_ROOT/uvm_lite/obj_dir_f64/Vtb_triple_fp_uvm_lite_f64"
 ```
 
 ### f32
@@ -110,22 +118,22 @@ verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_fp_uvm_lite_f32 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/obj_dir_f32 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/tb_triple_fp_uvm_lite_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_uvm_lite_pkg.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_req_if.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_rsp_if.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_uvm_lite_cov.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_uvm_lite_env.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddPipe_l4_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulPipe_l4_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/obj_dir_f32/Vtb_triple_fp_uvm_lite_f32
+  -Mdir "$REPO_ROOT/uvm_lite/obj_dir_f32" \
+  "$REPO_ROOT/uvm_lite/tb_triple_fp_uvm_lite_f32.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_uvm_lite_pkg.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_req_if.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_rsp_if.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_uvm_lite_cov.sv" \
+  "$REPO_ROOT/uvm_lite/triple_fp_uvm_lite_env.sv" \
+  "$REPO_ROOT/TripleAddPipe_l4_f32.sv" \
+  "$REPO_ROOT/TripleAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleAddRecFNToRaw.sv" \
+  "$REPO_ROOT/TripleMulPipe_l4_f32.sv" \
+  "$REPO_ROOT/TripleMulRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
+"$REPO_ROOT/uvm_lite/obj_dir_f32/Vtb_triple_fp_uvm_lite_f32"
 ```
 
 ## Full-Simulator Usage

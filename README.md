@@ -1,8 +1,8 @@
 # Triple FP Units
 
-Standalone custom floating-point units built in the BOOM/HardFloat RTL environment.
+Standalone custom floating-point units built in the BOOM / HardFloat RTL environment.
 
-This repo now contains two 3-operand families and one 4-operand family:
+This repo contains three standalone multi-operand unit families:
 
 - triple add: `a + b + c`
 - triple multiply: `a * b * c`
@@ -16,49 +16,49 @@ These are standalone pipelined RTL blocks. They are not integrated into BOOM dec
 
 Implemented top-level units:
 
-- [TripleAddPipe_l4_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddPipe_l4_f64.sv)
-- [TripleAddPipe_l4_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddPipe_l4_f32.sv)
-- [TripleMulPipe_l4_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulPipe_l4_f64.sv)
-- [TripleMulPipe_l4_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulPipe_l4_f32.sv)
-- [TripleMulAddPipe_l4_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv)
-- [TripleMulAddPipe_l4_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv)
+- [TripleAddPipe_l4_f64.sv](./TripleAddPipe_l4_f64.sv)
+- [TripleAddPipe_l4_f32.sv](./TripleAddPipe_l4_f32.sv)
+- [TripleMulPipe_l4_f64.sv](./TripleMulPipe_l4_f64.sv)
+- [TripleMulPipe_l4_f32.sv](./TripleMulPipe_l4_f32.sv)
+- [TripleMulAddPipe_l4_f64.sv](./TripleMulAddPipe_l4_f64.sv)
+- [TripleMulAddPipe_l4_f32.sv](./TripleMulAddPipe_l4_f32.sv)
 
 Shared inner pipes:
 
-- [TripleAddRecFNPipe_l2.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNPipe_l2.sv)
-- [TripleMulRecFNPipe_l2.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNPipe_l2.sv)
-- [TripleMulAddRecFNPipe_l2.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv)
+- [TripleAddRecFNPipe_l2.sv](./TripleAddRecFNPipe_l2.sv)
+- [TripleMulRecFNPipe_l2.sv](./TripleMulRecFNPipe_l2.sv)
+- [TripleMulAddRecFNPipe_l2.sv](./TripleMulAddRecFNPipe_l2.sv)
 
 Raw arithmetic cores:
 
-- [TripleAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNToRaw.sv)
-- [TripleMulRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNToRaw.sv)
-- [TripleMulAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv)
+- [TripleAddRecFNToRaw.sv](./TripleAddRecFNToRaw.sv)
+- [TripleMulRecFNToRaw.sv](./TripleMulRecFNToRaw.sv)
+- [TripleMulAddRecFNToRaw.sv](./TripleMulAddRecFNToRaw.sv)
 
 Project navigation:
 
-- landing page: [PROJECT_SUMMARY.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/PROJECT_SUMMARY.md)
-- main spec: [TRIPLE_FP_UNITS_SPEC.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/TRIPLE_FP_UNITS_SPEC.md)
-- design constraints: [DESIGN_CONSTRAINTS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/DESIGN_CONSTRAINTS.md)
-- verification summary: [OFFLINE_VERIFICATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/OFFLINE_VERIFICATION.md)
-- diagrams page: [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BLOCK_DIAGRAMS.md)
-- examples: [examples/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/README.md)
-- HardFloat provenance: [HARDFLOAT_USAGE_AND_PROVENANCE.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/HARDFLOAT_USAGE_AND_PROVENANCE.md)
-- bug log: [BUG_REPORT_AND_FIXES.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BUG_REPORT_AND_FIXES.md)
-- command log: [COMMAND_HISTORY_DUMP.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/COMMAND_HISTORY_DUMP.md)
-- prompt log: [PROMPT_HISTORY_DUMP.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/PROMPT_HISTORY_DUMP.md)
+- landing page: [docs/PROJECT_SUMMARY.md](./docs/PROJECT_SUMMARY.md)
+- main spec: [docs/TRIPLE_FP_UNITS_SPEC.md](./docs/TRIPLE_FP_UNITS_SPEC.md)
+- design constraints: [docs/DESIGN_CONSTRAINTS.md](./docs/DESIGN_CONSTRAINTS.md)
+- verification summary: [docs/OFFLINE_VERIFICATION.md](./docs/OFFLINE_VERIFICATION.md)
+- diagrams page: [docs/BLOCK_DIAGRAMS.md](./docs/BLOCK_DIAGRAMS.md)
+- examples: [examples/README.md](./examples/README.md)
+- HardFloat provenance: [docs/HARDFLOAT_USAGE_AND_PROVENANCE.md](./docs/HARDFLOAT_USAGE_AND_PROVENANCE.md)
+- bug log: [docs/BUG_REPORT_AND_FIXES.md](./docs/BUG_REPORT_AND_FIXES.md)
+- command log: [docs/COMMAND_HISTORY_DUMP.md](./docs/COMMAND_HISTORY_DUMP.md)
+- prompt log: [docs/PROMPT_HISTORY_DUMP.md](./docs/PROMPT_HISTORY_DUMP.md)
 
 ## Design Goals
 
 - keep the visible interface and latency aligned with the original FMA wrapper style
-- reuse the existing recFN representation and HardFloat rounders already present in the BOOM/Chipyard RTL tree
+- reuse the existing recFN representation and HardFloat rounders already present in the surrounding BOOM workspace
 - build the arithmetic raw cores from scratch instead of chaining top-level FMA wrappers
 - provide strong standalone verification
 - provide readable Python reference/debug models for understanding the datapath
 
 Detailed constraint list:
 
-- [DESIGN_CONSTRAINTS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/DESIGN_CONSTRAINTS.md)
+- [docs/DESIGN_CONSTRAINTS.md](./docs/DESIGN_CONSTRAINTS.md)
 
 ## Pipeline Shape
 
@@ -86,6 +86,8 @@ For `f32`, the external wrapper still uses the BOOM-style 65-bit shell, but the 
 
 ## Block Diagrams
 
+The detailed block diagrams are collected in [docs/BLOCK_DIAGRAMS.md](./docs/BLOCK_DIAGRAMS.md).
+
 ### `TripleAddPipe_l4_f64`
 
 ```mermaid
@@ -96,19 +98,6 @@ flowchart LR
   D --> E["RoundRawFNToRecFN_e11_s53"]
   E --> F["Inner Stage-1 Register"]
   F --> G["Wrapper Output Register"]
-```
-
-### `TripleAddPipe_l4_f32`
-
-```mermaid
-flowchart LR
-  A["Inputs<br/>65-bit shell"] --> B["Wrapper Input Register"]
-  B --> C["Low 33-bit Extract"]
-  C --> D["TripleAddRecFNToRaw<br/>decode<br/>align<br/>3-input signed accumulate<br/>normalize"]
-  D --> E["Inner Stage-0 Register<br/>raw bundle + rm"]
-  E --> F["RoundRawFNToRecFN_e8_s24"]
-  F --> G["Inner Stage-1 Register"]
-  G --> H["Wrapper Output Register<br/>33-bit result repacked into 65-bit shell"]
 ```
 
 ### `TripleMulPipe_l4_f64`
@@ -123,19 +112,6 @@ flowchart LR
   F --> G["Wrapper Output Register"]
 ```
 
-### `TripleMulPipe_l4_f32`
-
-```mermaid
-flowchart LR
-  A["Inputs<br/>65-bit shell"] --> B["Wrapper Input Register"]
-  B --> C["Low 33-bit Extract"]
-  C --> D["TripleMulRecFNToRaw<br/>decode<br/>exact triple product<br/>normalize<br/>exp clamp"]
-  D --> E["Inner Stage-0 Register<br/>raw bundle + rm"]
-  E --> F["RoundRawFNToRecFN_e8_s24"]
-  F --> G["Inner Stage-1 Register"]
-  G --> H["Wrapper Output Register<br/>33-bit result repacked into 65-bit shell"]
-```
-
 ### `TripleMulAddPipe_l4_f64`
 
 ```mermaid
@@ -148,119 +124,61 @@ flowchart LR
   F --> G["Wrapper Output Register"]
 ```
 
-### `TripleMulAddPipe_l4_f32`
-
-```mermaid
-flowchart LR
-  A["Inputs<br/>65-bit shell"] --> B["Wrapper Input Register"]
-  B --> C["Low 33-bit Extract"]
-  C --> D["TripleMulAddRecFNToRaw<br/>decode<br/>exact triple product<br/>align d<br/>signed add<br/>normalize<br/>exp clamp"]
-  D --> E["Inner Stage-0 Register<br/>raw bundle + rm"]
-  E --> F["RoundRawFNToRecFN_e8_s24"]
-  F --> G["Inner Stage-1 Register"]
-  G --> H["Wrapper Output Register<br/>33-bit result repacked into 65-bit shell"]
-```
-
-## Arithmetic Breakdown
-
-### Triple add path
-
-The add units perform:
-
-1. recFN operand classification
-2. special-case handling for NaN, infinity, and zero
-3. finite exponent alignment using the minimum recoded exponent
-4. 3-input signed accumulation in a wide exact accumulator
-5. raw normalization into the HardFloat rounder contract
-6. final rounding and recFN packing
-
-### Triple multiply path
-
-The multiply units perform:
-
-1. recFN operand classification
-2. special-case handling for NaN, infinity, zero, and `inf * 0`
-3. hidden-bit significand formation
-4. exact 3-input significand product
-5. recoded-exponent accumulation
-6. raw normalization and exponent clamp
-7. final rounding and recFN packing
-
-### Triple multiply-add path
-
-The multiply-add units perform:
-
-1. recFN operand classification for `a`, `b`, `c`, and `d`
-2. product-side special-case handling for `inf * 0`
-3. exact triple-product formation for `a*b*c`
-4. addend alignment for `d`
-5. signed accumulation of `product` and `d`
-6. raw normalization and exponent clamp
-7. final rounding and recFN packing
-
 ## Tool Installation
 
-### Required local tools
-
-For the verification flows used in this project, install:
+### Required tools
 
 - `verilator`
-- `svlint`
 - `python3`
 
-On macOS with Homebrew:
+Optional but useful:
+
+- `svlint`
+- `cargo`
+- Questa, VCS, or Xcelium for functional coverage in `uvm_lite/`
+
+### macOS
 
 ```sh
-brew install verilator svlint python
+brew install verilator python svlint
 ```
 
-### Optional tools
+### Linux
 
-- `iverilog`
-  useful for alternate lightweight simulation
-- Questa, VCS, or Xcelium
-  useful if you want functional coverage collection from the `uvm_lite/` environment
+Ubuntu / Debian:
 
-## External References
+```sh
+sudo apt update
+sudo apt install -y build-essential git python3 python3-pip verilator
+```
 
-This project sits on top of the BOOM / Chipyard / HardFloat ecosystem. Helpful official references are:
+If you also want `svlint` on Linux:
 
-- Chipyard repository: [ucb-bar/chipyard](https://github.com/ucb-bar/chipyard)
-- Chipyard docs: [chipyard.readthedocs.io](https://chipyard.readthedocs.io/)
-- BOOM repository: [riscv-boom/riscv-boom](https://github.com/riscv-boom/riscv-boom)
-- BOOM docs and publications: [boom-core.org](https://boom-core.org/)
-- Berkeley HardFloat repository mirror used in this project: [ucb-bar/berkeley-hardfloat](https://github.com/ucb-bar/berkeley-hardfloat)
-- Official Berkeley HardFloat overview: [jhauser.us/arithmetic/HardFloat.html](https://www.jhauser.us/arithmetic/HardFloat.html)
-- HardFloat Verilog module documentation: [HardFloat-Verilog.html](https://www.jhauser.us/arithmetic/HardFloat-1/doc/HardFloat-Verilog.html)
-
-Recommended citation style taken from project-maintained sources:
-
-- Chipyard: cite the IEEE Micro 2020 Chipyard paper by Amid et al. as recommended in the Chipyard README.
-- BOOM / SonicBOOM: cite the SonicBOOM 2020 CARRV workshop paper by Zhao et al. as recommended in the BOOM README.
-- HardFloat: the repository README does not publish a project BibTeX block, so this repo references HardFloat using the official Berkeley HardFloat documentation by John R. Hauser and the project/release pages.
-
-For project-specific provenance details, see:
-
-- [HARDFLOAT_USAGE_AND_PROVENANCE.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/HARDFLOAT_USAGE_AND_PROVENANCE.md)
+```sh
+sudo apt install -y cargo
+cargo install svlint
+```
 
 ## Environment Setup
 
-The commands below assume your BOOM workspace is:
+This repo expects to live inside a BOOM workspace, because it reuses the existing HardFloat-generated rounders and helper RTL from the parent tree.
 
-```sh
-/Users/kvsaiakhil/Projects/BoomV3
+Typical layout:
+
+```text
+/path/to/BoomV3/
+  RoundRawFNToRecFN_e11_s53.sv
+  RoundRawFNToRecFN_e8_s24.sv
+  ...
+  triple_fp_units/
 ```
 
-The subproject root is:
+Set these once per shell:
 
 ```sh
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units
-```
-
-For convenience:
-
-```sh
-cd /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units
+export BOOMV3_ROOT=/path/to/BoomV3
+export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+cd "$REPO_ROOT"
 ```
 
 ## Verification
@@ -278,54 +196,51 @@ There is also a reusable `uvm_lite/` layer for the original triple-add and tripl
 
 Directed benches for the original 3-operand families:
 
-- [tb_triple_fp_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f64.sv)
-- [tb_triple_fp_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f32.sv)
+- [tb_triple_fp_f64.sv](./tb_triple_fp_f64.sv)
+- [tb_triple_fp_f32.sv](./tb_triple_fp_f32.sv)
 
 Directed benches for the 4-operand family:
 
-- [tb_triple_mul_add_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f64.sv)
-- [tb_triple_mul_add_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f32.sv)
+- [tb_triple_mul_add_f64.sv](./tb_triple_mul_add_f64.sv)
+- [tb_triple_mul_add_f32.sv](./tb_triple_mul_add_f32.sv)
 
 Run `f64` directed `a*b*c+d`:
 
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_f64 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f64 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f64/Vtb_triple_mul_add_f64
+  -Mdir "$REPO_ROOT/obj_dir_quad_f64" \
+  "$REPO_ROOT/tb_triple_mul_add_f64.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f64.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/INToRecFN_i64_e11_s53.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv"
+"$REPO_ROOT/obj_dir_quad_f64/Vtb_triple_mul_add_f64"
 ```
-
-Expected result:
-
-- `tb_triple_mul_add_f64 PASS`
 
 Run `f32` directed `a*b*c+d`:
 
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_f32 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f32 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f32/Vtb_triple_mul_add_f32
+  -Mdir "$REPO_ROOT/obj_dir_quad_f32" \
+  "$REPO_ROOT/tb_triple_mul_add_f32.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/INToRecFN_i64_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
+"$REPO_ROOT/obj_dir_quad_f32/Vtb_triple_mul_add_f32"
 ```
 
-Expected result:
+Expected results:
 
+- `tb_triple_mul_add_f64 PASS`
 - `tb_triple_mul_add_f32 PASS`
 
 ### 2. Deep vector replay for `a+b+c` and `a*b*c`
@@ -335,14 +250,14 @@ This flow uses the larger vector corpus in `verif/vectors/`, backed by Berkeley 
 If you want to regenerate those vectors:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_fp_vectors.py --n-per-seed 128
+python3 "$REPO_ROOT/verif/generate_triple_fp_vectors.py" --n-per-seed 128
 ```
 
 Key files:
 
-- [verif/generate_triple_fp_vectors.py](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_fp_vectors.py)
-- [verif/tb_triple_fp_random_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_fp_random_f64.sv)
-- [verif/tb_triple_fp_random_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_fp_random_f32.sv)
+- [verif/generate_triple_fp_vectors.py](./verif/generate_triple_fp_vectors.py)
+- [verif/tb_triple_fp_random_f64.sv](./verif/tb_triple_fp_random_f64.sv)
+- [verif/tb_triple_fp_random_f32.sv](./verif/tb_triple_fp_random_f32.sv)
 
 ### 3. Deep vector replay for `a*b*c+d`
 
@@ -351,7 +266,7 @@ This flow uses a Python-generated random vector corpus driven by the staged `tri
 Regenerate vectors:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_mul_add_vectors.py --n 4096
+python3 "$REPO_ROOT/verif/generate_triple_mul_add_vectors.py" --n 4096
 ```
 
 Run `f64` deep replay:
@@ -359,14 +274,14 @@ Run `f64` deep replay:
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_random_f64 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64
+  -Mdir "$REPO_ROOT/obj_dir_muladd_rand_f64" \
+  "$REPO_ROOT/verif/tb_triple_mul_add_random_f64.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f64.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e11_s53.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv"
+"$REPO_ROOT/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64"
 ```
 
 Run `f32` deep replay:
@@ -374,30 +289,28 @@ Run `f32` deep replay:
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_random_f32 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f32 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32
+  -Mdir "$REPO_ROOT/obj_dir_muladd_rand_f32" \
+  "$REPO_ROOT/verif/tb_triple_mul_add_random_f32.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv"
+"$REPO_ROOT/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32"
 ```
 
 Key files:
 
-- [verif/generate_triple_mul_add_vectors.py](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_mul_add_vectors.py)
-- [verif/tb_triple_mul_add_random_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f64.sv)
-- [verif/tb_triple_mul_add_random_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f32.sv)
+- [verif/generate_triple_mul_add_vectors.py](./verif/generate_triple_mul_add_vectors.py)
+- [verif/tb_triple_mul_add_random_f64.sv](./verif/tb_triple_mul_add_random_f64.sv)
+- [verif/tb_triple_mul_add_random_f32.sv](./verif/tb_triple_mul_add_random_f32.sv)
 
 ### 4. Python staged reference/debug models
-
-These models are best for understanding each unit rather than replacing RTL simulation.
 
 Triple add, `f64`:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" \
   --unit triple_add_f64 \
   --input-format ieee \
   --rm rne \
@@ -409,7 +322,7 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
 Triple multiply, `f64`:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" \
   --unit triple_mul_f64 \
   --input-format ieee \
   --rm rne \
@@ -421,7 +334,7 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
 Triple multiply-add, `f64`:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" \
   --unit triple_mul_add_f64 \
   --input-format ieee \
   --rm rne \
@@ -434,59 +347,59 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
 Python sanity checks:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/test_reference_models.py
+python3 "$REPO_ROOT/python_reference_models/test_reference_models.py"
 ```
 
 ## How To Verify Each Implementation
 
 ### `TripleAddPipe_l4_f64`
 
-- directed `f64` bench: [tb_triple_fp_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f64.sv)
-- deep `f64` replay: [verif/tb_triple_fp_random_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_fp_random_f64.sv)
-- `uvm_lite` `f64`: [uvm_lite/tb_triple_fp_uvm_lite_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/tb_triple_fp_uvm_lite_f64.sv)
+- directed `f64` bench: [tb_triple_fp_f64.sv](./tb_triple_fp_f64.sv)
+- deep `f64` replay: [verif/tb_triple_fp_random_f64.sv](./verif/tb_triple_fp_random_f64.sv)
+- `uvm_lite` `f64`: [uvm_lite/tb_triple_fp_uvm_lite_f64.sv](./uvm_lite/tb_triple_fp_uvm_lite_f64.sv)
 - Python model: `--unit triple_add_f64`
 
 ### `TripleMulPipe_l4_f64`
 
-- directed `f64` bench: [tb_triple_fp_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f64.sv)
-- deep `f64` replay: [verif/tb_triple_fp_random_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_fp_random_f64.sv)
-- `uvm_lite` `f64`: [uvm_lite/tb_triple_fp_uvm_lite_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/tb_triple_fp_uvm_lite_f64.sv)
+- directed `f64` bench: [tb_triple_fp_f64.sv](./tb_triple_fp_f64.sv)
+- deep `f64` replay: [verif/tb_triple_fp_random_f64.sv](./verif/tb_triple_fp_random_f64.sv)
+- `uvm_lite` `f64`: [uvm_lite/tb_triple_fp_uvm_lite_f64.sv](./uvm_lite/tb_triple_fp_uvm_lite_f64.sv)
 - Python model: `--unit triple_mul_f64`
 
 ### `TripleMulAddPipe_l4_f64`
 
-- directed `f64` bench: [tb_triple_mul_add_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f64.sv)
-- deep `f64` replay: [verif/tb_triple_mul_add_random_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f64.sv)
+- directed `f64` bench: [tb_triple_mul_add_f64.sv](./tb_triple_mul_add_f64.sv)
+- deep `f64` replay: [verif/tb_triple_mul_add_random_f64.sv](./verif/tb_triple_mul_add_random_f64.sv)
 - Python model: `--unit triple_mul_add_f64`
 
 ### `TripleAddPipe_l4_f32`
 
-- directed `f32` bench: [tb_triple_fp_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f32.sv)
-- deep `f32` replay: [verif/tb_triple_fp_random_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_fp_random_f32.sv)
-- `uvm_lite` `f32`: [uvm_lite/tb_triple_fp_uvm_lite_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/tb_triple_fp_uvm_lite_f32.sv)
+- directed `f32` bench: [tb_triple_fp_f32.sv](./tb_triple_fp_f32.sv)
+- deep `f32` replay: [verif/tb_triple_fp_random_f32.sv](./verif/tb_triple_fp_random_f32.sv)
+- `uvm_lite` `f32`: [uvm_lite/tb_triple_fp_uvm_lite_f32.sv](./uvm_lite/tb_triple_fp_uvm_lite_f32.sv)
 - Python model: `--unit triple_add_f32`
 
 ### `TripleMulPipe_l4_f32`
 
-- directed `f32` bench: [tb_triple_fp_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f32.sv)
-- deep `f32` replay: [verif/tb_triple_fp_random_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_fp_random_f32.sv)
-- `uvm_lite` `f32`: [uvm_lite/tb_triple_fp_uvm_lite_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/tb_triple_fp_uvm_lite_f32.sv)
+- directed `f32` bench: [tb_triple_fp_f32.sv](./tb_triple_fp_f32.sv)
+- deep `f32` replay: [verif/tb_triple_fp_random_f32.sv](./verif/tb_triple_fp_random_f32.sv)
+- `uvm_lite` `f32`: [uvm_lite/tb_triple_fp_uvm_lite_f32.sv](./uvm_lite/tb_triple_fp_uvm_lite_f32.sv)
 - Python model: `--unit triple_mul_f32`
 
 ### `TripleMulAddPipe_l4_f32`
 
-- directed `f32` bench: [tb_triple_mul_add_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f32.sv)
-- deep `f32` replay: [verif/tb_triple_mul_add_random_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f32.sv)
+- directed `f32` bench: [tb_triple_mul_add_f32.sv](./tb_triple_mul_add_f32.sv)
+- deep `f32` replay: [verif/tb_triple_mul_add_random_f32.sv](./verif/tb_triple_mul_add_random_f32.sv)
 - Python model: `--unit triple_mul_add_f32`
 
 ## Python Reference Models
 
 The Python reference/debug models are for understanding the format and following each stage in software:
 
-- [python_reference_models/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/README.md)
-- [python_reference_models/triple_fp_reference_lib.py](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/triple_fp_reference_lib.py)
-- [python_reference_models/run_reference_model.py](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py)
-- [python_reference_models/test_reference_models.py](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/test_reference_models.py)
+- [python_reference_models/README.md](./python_reference_models/README.md)
+- [python_reference_models/triple_fp_reference_lib.py](./python_reference_models/triple_fp_reference_lib.py)
+- [python_reference_models/run_reference_model.py](./python_reference_models/run_reference_model.py)
+- [python_reference_models/test_reference_models.py](./python_reference_models/test_reference_models.py)
 
 They provide:
 
@@ -500,19 +413,19 @@ They provide:
 Run the existing structured replay flow for the original 3-operand families:
 
 ```sh
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/run_uvm_lite_verilator.sh all
+"$REPO_ROOT/uvm_lite/run_uvm_lite_verilator.sh" all
 ```
 
 Run the new `a*b*c+d` vector generator:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_mul_add_vectors.py --n 4096
+python3 "$REPO_ROOT/verif/generate_triple_mul_add_vectors.py" --n 4096
 ```
 
 Run the Python reference model on one `a*b*c+d` case:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" \
   --unit triple_mul_add_f64 \
   --input-format ieee \
   --rm rne \
@@ -522,35 +435,77 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
   --d 0x4010000000000000
 ```
 
-More runnable examples:
+## Examples
 
-- [examples/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/README.md)
-- [quickstart_commands.sh](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/quickstart_commands.sh)
-- [STAGE_BY_STAGE_EXAMPLES.txt](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/STAGE_BY_STAGE_EXAMPLES.txt)
-- [RANDOM_STAGE_BY_STAGE_EXAMPLES.txt](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/RANDOM_STAGE_BY_STAGE_EXAMPLES.txt)
+Worked examples and command snippets live here:
 
-## Best Entry Points
+- [examples/README.md](./examples/README.md)
+- [examples/quickstart_commands.sh](./examples/quickstart_commands.sh)
+- [examples/STAGE_BY_STAGE_EXAMPLES.txt](./examples/STAGE_BY_STAGE_EXAMPLES.txt)
+- [examples/RANDOM_STAGE_BY_STAGE_EXAMPLES.txt](./examples/RANDOM_STAGE_BY_STAGE_EXAMPLES.txt)
 
-If you want a quick project overview:
+## External References
 
-1. [PROJECT_SUMMARY.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/PROJECT_SUMMARY.md)
-2. [BLOCK_DIAGRAMS.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BLOCK_DIAGRAMS.md)
-3. [TRIPLE_FP_UNITS_SPEC.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/TRIPLE_FP_UNITS_SPEC.md)
+This project sits on top of the BOOM / Chipyard / HardFloat ecosystem. Helpful official references are:
 
-If you want the implementation first:
+- Chipyard repository: [ucb-bar/chipyard](https://github.com/ucb-bar/chipyard)
+- Chipyard docs: [chipyard.readthedocs.io](https://chipyard.readthedocs.io/)
+- BOOM repository: [riscv-boom/riscv-boom](https://github.com/riscv-boom/riscv-boom)
+- BOOM docs and publications: [boom-core.org](https://boom-core.org/)
+- Berkeley HardFloat repository mirror used in this project: [ucb-bar/berkeley-hardfloat](https://github.com/ucb-bar/berkeley-hardfloat)
+- Official Berkeley HardFloat overview: [jhauser.us/arithmetic/HardFloat.html](https://www.jhauser.us/arithmetic/HardFloat.html)
+- HardFloat Verilog module documentation: [HardFloat-Verilog.html](https://www.jhauser.us/arithmetic/HardFloat-1/doc/HardFloat-Verilog.html)
 
-1. [TripleAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNToRaw.sv)
-2. [TripleMulRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNToRaw.sv)
-3. [TripleMulAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv)
+Recommended citation style taken from project-maintained sources:
+
+- Chipyard: cite the IEEE Micro 2020 Chipyard paper by Amid et al. as recommended in the Chipyard README.
+- BOOM / SonicBOOM: cite the SonicBOOM 2020 CARRV workshop paper by Zhao et al. as recommended in the BOOM README.
+- HardFloat: this repo references HardFloat using the official Berkeley HardFloat documentation by John R. Hauser and the project/release pages.
+
+For project-specific provenance details, see:
+
+- [docs/HARDFLOAT_USAGE_AND_PROVENANCE.md](./docs/HARDFLOAT_USAGE_AND_PROVENANCE.md)
+
+## Recommended Reading Paths
+
+If you want to understand the architecture first:
+
+1. [README.md](./README.md)
+2. [docs/BLOCK_DIAGRAMS.md](./docs/BLOCK_DIAGRAMS.md)
+3. [docs/TRIPLE_FP_UNITS_SPEC.md](./docs/TRIPLE_FP_UNITS_SPEC.md)
+
+If you want the raw cores first:
+
+1. [TripleAddRecFNToRaw.sv](./TripleAddRecFNToRaw.sv)
+2. [TripleMulRecFNToRaw.sv](./TripleMulRecFNToRaw.sv)
+3. [TripleMulAddRecFNToRaw.sv](./TripleMulAddRecFNToRaw.sv)
+
+If you want verification first:
+
+1. [docs/OFFLINE_VERIFICATION.md](./docs/OFFLINE_VERIFICATION.md)
+2. [verif/README.md](./verif/README.md)
+3. [uvm_lite/README.md](./uvm_lite/README.md)
 
 If you want the software model first:
 
-1. [python_reference_models/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/README.md)
-2. [python_reference_models/run_reference_model.py](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py)
-3. [python_reference_models/triple_fp_reference_lib.py](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/triple_fp_reference_lib.py)
+1. [python_reference_models/README.md](./python_reference_models/README.md)
+2. [python_reference_models/run_reference_model.py](./python_reference_models/run_reference_model.py)
+3. [python_reference_models/triple_fp_reference_lib.py](./python_reference_models/triple_fp_reference_lib.py)
 
-If you want the project audit trail:
+If you want the audit trail:
 
-1. [BUG_REPORT_AND_FIXES.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/BUG_REPORT_AND_FIXES.md)
-2. [COMMAND_HISTORY_DUMP.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/COMMAND_HISTORY_DUMP.md)
-3. [PROMPT_HISTORY_DUMP.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/PROMPT_HISTORY_DUMP.md)
+1. [docs/BUG_REPORT_AND_FIXES.md](./docs/BUG_REPORT_AND_FIXES.md)
+2. [docs/COMMAND_HISTORY_DUMP.md](./docs/COMMAND_HISTORY_DUMP.md)
+3. [docs/PROMPT_HISTORY_DUMP.md](./docs/PROMPT_HISTORY_DUMP.md)
+
+## Current Project Status
+
+As it stands, the standalone project includes:
+
+- implemented RTL for six units
+- pipeline-stage alignment with the original FMA wrapper style
+- directed benches for all units
+- deep vector replay for the original triple-add and triple-multiply families
+- Python-backed deep vector replay for the triple-multiply-add family
+- a reusable `uvm_lite/` layer for the original triple-add and triple-multiply families
+- Python staged reference/debug models for all units

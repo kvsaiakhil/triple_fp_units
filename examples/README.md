@@ -7,19 +7,27 @@ It is aimed at two use cases:
 - getting a new user from zero to a first successful run quickly
 - showing concrete commands for RTL simulation and Python-model exploration
 
+Assumed shell variables:
+
+```sh
+export BOOMV3_ROOT=/path/to/BoomV3
+export REPO_ROOT="$BOOMV3_ROOT/triple_fp_units"
+cd "$REPO_ROOT"
+```
+
 ## Files
 
-- [quickstart_commands.sh](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/quickstart_commands.sh)
+- [quickstart_commands.sh](./quickstart_commands.sh)
   a copy-paste friendly command collection
-- [STAGE_BY_STAGE_EXAMPLES.txt](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/STAGE_BY_STAGE_EXAMPLES.txt)
+- [STAGE_BY_STAGE_EXAMPLES.txt](./STAGE_BY_STAGE_EXAMPLES.txt)
   a plain-text walkthrough with one worked pipeline example for each implemented unit
-- [RANDOM_STAGE_BY_STAGE_EXAMPLES.txt](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/examples/RANDOM_STAGE_BY_STAGE_EXAMPLES.txt)
+- [RANDOM_STAGE_BY_STAGE_EXAMPLES.txt](./RANDOM_STAGE_BY_STAGE_EXAMPLES.txt)
   a second plain-text walkthrough using deterministic random floating-point inputs
 
 ## Example 1: Python model for `a*b*c+d` in `f64`
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+python3 "$REPO_ROOT/python_reference_models/run_reference_model.py" \
   --unit triple_mul_add_f64 \
   --input-format ieee \
   --rm rne \
@@ -40,16 +48,16 @@ What this does:
 ```sh
 verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
   --top-module tb_triple_mul_add_f32 \
-  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f32 \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv \
-  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f32/Vtb_triple_mul_add_f32
+  -Mdir "$REPO_ROOT/obj_dir_quad_f32" \
+  "$REPO_ROOT/tb_triple_mul_add_f32.sv" \
+  "$REPO_ROOT/TripleMulAddPipe_l4_f32.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNPipe_l2.sv" \
+  "$REPO_ROOT/TripleMulAddRecFNToRaw.sv" \
+  "$BOOMV3_ROOT/INToRecFN_i64_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundRawFNToRecFN_e8_s24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv" \
+  "$BOOMV3_ROOT/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv"
+"$REPO_ROOT/obj_dir_quad_f32/Vtb_triple_mul_add_f32"
 ```
 
 Expected result:
@@ -61,14 +69,14 @@ Expected result:
 Generate vectors:
 
 ```sh
-python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_mul_add_vectors.py --n 4096
+python3 "$REPO_ROOT/verif/generate_triple_mul_add_vectors.py" --n 4096
 ```
 
 Run replay:
 
 ```sh
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64
-/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32
+"$REPO_ROOT/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64"
+"$REPO_ROOT/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32"
 ```
 
 Expected results after a successful build:
@@ -87,6 +95,6 @@ These units are still part of the repo and can be explored in the same way:
 
 See:
 
-- [README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/README.md)
-- [OFFLINE_VERIFICATION.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/docs/OFFLINE_VERIFICATION.md)
-- [python_reference_models/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/README.md)
+- [README.md](../README.md)
+- [OFFLINE_VERIFICATION.md](../docs/OFFLINE_VERIFICATION.md)
+- [python_reference_models/README.md](../python_reference_models/README.md)
