@@ -23,6 +23,7 @@ def main() -> int:
     parser.add_argument("--a", required=True, help="operand A in hex")
     parser.add_argument("--b", required=True, help="operand B in hex")
     parser.add_argument("--c", required=True, help="operand C in hex")
+    parser.add_argument("--d", help="operand D in hex, required for triple_mul_add_* units")
     args = parser.parse_args()
 
     rm = parse_rm(args.rm)
@@ -31,7 +32,13 @@ def main() -> int:
     a_shell, _ = parse_operand(args.a, fmt, args.input_format)
     b_shell, _ = parse_operand(args.b, fmt, args.input_format)
     c_shell, _ = parse_operand(args.c, fmt, args.input_format)
-    result = model.run(rm, a_shell, b_shell, c_shell)
+    if args.unit.startswith("triple_mul_add_"):
+        if args.d is None:
+            parser.error("--d is required for triple_mul_add_* units")
+        d_shell, _ = parse_operand(args.d, fmt, args.input_format)
+        result = model.run(rm, a_shell, b_shell, c_shell, d_shell)
+    else:
+        result = model.run(rm, a_shell, b_shell, c_shell)
     print(result.pretty_text())
     return 0
 

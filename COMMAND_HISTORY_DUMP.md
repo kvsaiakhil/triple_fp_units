@@ -212,12 +212,104 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
   --a 0x3f800000 \
   --b 0x40000000 \
   --c 0x40400000
+
+python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+  --unit triple_mul_add_f64 \
+  --input-format ieee \
+  --rm rne \
+  --a 0x3ff0000000000000 \
+  --b 0x4000000000000000 \
+  --c 0x4008000000000000 \
+  --d 0x4010000000000000
 ```
 
 ### Sampled Python validation
 
 ```sh
 python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/test_reference_models.py
+```
+
+## Triple Multiply-Add Bring-Up And Verification
+
+### Directed benches
+
+```sh
+verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
+  --top-module tb_triple_mul_add_f64 \
+  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f64 \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f64.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e11_s53.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie7_is64_oe11_os53.sv
+/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f64/Vtb_triple_mul_add_f64
+
+verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
+  --top-module tb_triple_mul_add_f32 \
+  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f32 \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_mul_add_f32.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/INToRecFN_i64_e8_s24.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie7_is64_oe8_os24.sv
+/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_quad_f32/Vtb_triple_mul_add_f32
+```
+
+### Random vector generation and replay
+
+```sh
+python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_mul_add_vectors.py --n 1024
+python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/generate_triple_mul_add_vectors.py --n 4096
+
+verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
+  --top-module tb_triple_mul_add_random_f64 \
+  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64 \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f64.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f64.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e11_s53.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie11_is55_oe11_os53.sv
+/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f64/Vtb_triple_mul_add_random_f64
+
+verilator --binary --timing -Wall -Wno-fatal -Wno-UNUSEDSIGNAL \
+  --top-module tb_triple_mul_add_random_f32 \
+  -Mdir /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f32 \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f32.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNPipe_l2.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundRawFNToRecFN_e8_s24.sv \
+  /Users/kvsaiakhil/Projects/BoomV3/RoundAnyRawFNToRecFN_ie8_is26_oe8_os24.sv
+/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/obj_dir_muladd_rand_f32/Vtb_triple_mul_add_random_f32
+```
+
+### Python debug commands used during the `f32` inexact investigation
+
+```sh
+python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+  --unit triple_mul_add_f32 \
+  --input-format recfn \
+  --rm 0 \
+  --a 0x00000000064415e18 \
+  --b 0x00000000080800000 \
+  --c 0x0000000006901cfb8 \
+  --d 0x00000000141000000
+
+python3 - <<'PY'
+import sys
+sys.path.insert(0, '/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models')
+from triple_fp_reference_lib import build_model
+m = build_model('triple_mul_add_f32')
+r = m.run(0, 0x00000000064415e18, 0x00000000080800000, 0x0000000006901cfb8, 0x00000000141000000)
+print(hex(r.final_shell_out), hex(r.final_flags))
+PY
 ```
 
 ## Git Bring-Up And Publishing

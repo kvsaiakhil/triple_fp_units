@@ -2,5 +2,6 @@
 __pycache__/
 *.pyc
 obj_dir/
+obj_dir_*/
 uvm_lite/obj_dir_f32/
 uvm_lite/obj_dir_f64/

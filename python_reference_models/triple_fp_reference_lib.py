@@ -498,6 +498,69 @@ def mul3_reference_from_recfn(ops: list[DecodedRecFN], fmt: FPFormat, rm: int) -
     return recode_from_ieee(ieee_bits, fmt), flags
 
 
+def mul3add_reference_from_recfn(
+    a: DecodedRecFN,
+    b: DecodedRecFN,
+    c: DecodedRecFN,
+    d: DecodedRecFN,
+    fmt: FPFormat,
+    rm: int,
+) -> tuple[int, int]:
+    ops = [a, b, c, d]
+    if any(op.is_snan for op in ops):
+        return canonical_nan_recfn(fmt), 0x10
+    if any(op.is_nan for op in ops):
+        return canonical_nan_recfn(fmt), 0x00
+
+    prod_sign = a.sign ^ b.sign ^ c.sign
+    any_inf_abc = a.is_inf or b.is_inf or c.is_inf
+    any_zero_abc = a.is_zero or b.is_zero or c.is_zero
+
+    if any_inf_abc and any_zero_abc:
+        return canonical_nan_recfn(fmt), 0x10
+    if any_inf_abc and d.is_inf and (prod_sign != d.sign):
+        return canonical_nan_recfn(fmt), 0x10
+    if any_inf_abc:
+        return recode_from_ieee(encode_ieee(prod_sign, fmt.exp_mask, 0, fmt), fmt), 0x00
+    if d.is_inf:
+        return recode_from_ieee(encode_ieee(d.sign, fmt.exp_mask, 0, fmt), fmt), 0x00
+
+    prod_sig = 0
+    prod_exp2 = 0
+    if not any_zero_abc:
+        assert a.sig is not None and a.exp2 is not None
+        assert b.sig is not None and b.exp2 is not None
+        assert c.sig is not None and c.exp2 is not None
+        prod_sig = a.sig * b.sig * c.sig
+        prod_exp2 = a.exp2 + b.exp2 + c.exp2
+
+    if prod_sig == 0 and d.is_zero:
+        sign = 1 if (rm == 2 and (prod_sign or d.sign)) else 0
+        return recode_from_ieee(encode_ieee(sign, 0, 0, fmt), fmt), 0x00
+
+    if prod_sig == 0:
+        assert d.sig is not None and d.exp2 is not None
+        ieee_bits, flags = round_finite(d.sign, d.sig, d.exp2, fmt, rm)
+        return recode_from_ieee(ieee_bits, fmt), flags
+
+    if d.is_zero:
+        ieee_bits, flags = round_finite(prod_sign, prod_sig, prod_exp2, fmt, rm)
+        return recode_from_ieee(ieee_bits, fmt), flags
+
+    assert d.sig is not None and d.exp2 is not None
+    min_exp2 = min(prod_exp2, d.exp2)
+    total = ((-prod_sig) if prod_sign else prod_sig) << (prod_exp2 - min_exp2)
+    total += ((-d.sig) if d.sign else d.sig) << (d.exp2 - min_exp2)
+
+    if total == 0:
+        sign = 1 if (rm == 2 and (prod_sign or d.sign)) else 0
+        return recode_from_ieee(encode_ieee(sign, 0, 0, fmt), fmt), 0x00
+
+    sign = 1 if total < 0 else 0
+    ieee_bits, flags = round_finite(sign, abs(total), min_exp2, fmt, rm)
+    return recode_from_ieee(ieee_bits, fmt), flags
+
+
 class TripleAddModel:
     def __init__(self, fmt: FPFormat):
         self.fmt = fmt
@@ -926,16 +989,194 @@ class TripleMulModel:
         return result
 
 
+class TripleMulAddModel:
+    def __init__(self, fmt: FPFormat):
+        self.fmt = fmt
+        self.unit_name = f"TripleMulAddPipe_l4_{fmt.name}"
+
+    def run(self, rm: int, a_shell: int, b_shell: int, c_shell: int, d_shell: int) -> ModelRunResult:
+        fmt = self.fmt
+        result = ModelRunResult(unit_name=self.unit_name, fmt=fmt, rm=rm)
+
+        a = decode_recfn(a_shell, fmt)
+        b = decode_recfn(b_shell, fmt)
+        c = decode_recfn(c_shell, fmt)
+        d = decode_recfn(d_shell, fmt)
+
+        result.add_stage(
+            "stage0_capture",
+            {
+                "visible_pipeline_stage": "wrapper input register",
+                "rm": f"{rm} ({ROUNDING_NAMES.get(rm, 'unknown')})",
+                "a": a.debug_dict(),
+                "b": b.debug_dict(),
+                "c": c.debug_dict(),
+                "d": d.debug_dict(),
+            },
+        )
+
+        prod_sign = a.sign ^ b.sign ^ c.sign
+        any_inf_abc = a.is_inf or b.is_inf or c.is_inf
+        any_zero_abc = a.is_zero or b.is_zero or c.is_zero
+        invalid_exc = False
+        is_nan = False
+        is_inf = False
+        is_zero = False
+        sign = 0
+        special_path = "finite_path"
+
+        if a.is_snan or b.is_snan or c.is_snan or d.is_snan:
+            invalid_exc = True
+            is_nan = True
+            special_path = "signaling_nan"
+        elif a.is_nan or b.is_nan or c.is_nan or d.is_nan:
+            is_nan = True
+            special_path = "quiet_nan"
+        elif any_inf_abc and any_zero_abc:
+            invalid_exc = True
+            is_nan = True
+            special_path = "product_inf_zero_invalid"
+        elif any_inf_abc and d.is_inf and (prod_sign != d.sign):
+            invalid_exc = True
+            is_nan = True
+            special_path = "product_inf_plus_opposite_inf"
+        elif any_inf_abc:
+            is_inf = True
+            sign = prod_sign
+            special_path = "product_inf"
+        elif d.is_inf:
+            is_inf = True
+            sign = d.sign
+            special_path = "addend_inf"
+
+        result.add_stage(
+            "stage1_decode_special",
+            {
+                "rtl_block": "TripleMulAddRecFNToRaw special-case decode",
+                "prod_sign": prod_sign,
+                "any_inf_abc": any_inf_abc,
+                "any_zero_abc": any_zero_abc,
+                "d_is_inf": d.is_inf,
+                "d_is_zero": d.is_zero,
+                "invalidExc": invalid_exc,
+                "selected_path": special_path,
+            },
+        )
+
+        prod_sig = 0
+        prod_exp2 = 0
+        if not (is_nan or is_inf) and not any_zero_abc:
+            assert a.sig is not None and a.exp2 is not None
+            assert b.sig is not None and b.exp2 is not None
+            assert c.sig is not None and c.exp2 is not None
+            prod_sig = a.sig * b.sig * c.sig
+            prod_exp2 = a.exp2 + b.exp2 + c.exp2
+            result.add_stage(
+                "stage1_finite_product",
+                {
+                    "sigA": hex_bits(a.sig, fmt.sig_w),
+                    "sigB": hex_bits(b.sig, fmt.sig_w),
+                    "sigC": hex_bits(c.sig, fmt.sig_w),
+                    "prodSig_exact": hex_bits(prod_sig, prod_sig.bit_length()),
+                    "prodExp2": prod_exp2,
+                },
+            )
+
+        if not (is_nan or is_inf):
+            addend_sig = 0 if d.is_zero else d.sig
+            addend_exp2 = 0 if d.exp2 is None else d.exp2
+            if prod_sig == 0 and addend_sig == 0:
+                is_zero = True
+                sign = 1 if (rm == 2 and (prod_sign or d.sign)) else 0
+                result.add_stage(
+                    "stage1_add_normalize",
+                    {
+                        "path": "all_zero",
+                        "raw_isZero": True,
+                        "raw_sign": sign,
+                        "raw_sExp": hex_bits(0, fmt.exp_w + 2),
+                        "raw_sig": hex_bits(0, fmt.raw_sig_w),
+                    },
+                )
+            else:
+                min_exp2 = addend_exp2 if prod_sig == 0 else (prod_exp2 if addend_sig == 0 else min(prod_exp2, addend_exp2))
+                total = 0
+                if prod_sig != 0:
+                    total += ((-prod_sig) if prod_sign else prod_sig) << (prod_exp2 - min_exp2)
+                if addend_sig != 0:
+                    total += ((-addend_sig) if d.sign else addend_sig) << (addend_exp2 - min_exp2)
+                result.add_stage(
+                    "stage1_add_normalize",
+                    {
+                        "addend_sig": None if addend_sig == 0 else hex_bits(addend_sig, fmt.sig_w),
+                        "addend_exp2": addend_exp2,
+                        "min_exp2": min_exp2,
+                        "sum_exact": "0" if total == 0 else hex(abs(total)),
+                        "sum_sign": 1 if total < 0 else 0,
+                    },
+                )
+
+        raw_s_exp = 0
+        raw_sig = 0
+        if is_nan or is_inf or is_zero:
+            sign = sign if (is_inf or is_zero) else 0
+        else:
+            if prod_sig == 0 and d.is_zero:
+                raw_sig = 0
+                raw_s_exp = 0
+            else:
+                final = decode_recfn(recfn_to_shell(mul3add_reference_from_recfn(a, b, c, d, fmt, rm)[0], fmt), fmt)
+                if final.sig is not None and final.exp2 is not None:
+                    raw_sig = final.sig << 2
+                    raw_s_exp = final.rec_exp & ((1 << (fmt.exp_w + 2)) - 1)
+
+        result.add_stage(
+            "stage2_round_register",
+            {
+                "visible_pipeline_stage": "inner round-input register",
+                "round_invalidExc_r": invalid_exc,
+                "round_isNaN_r": is_nan,
+                "round_isInf_r": is_inf,
+                "round_isZero_r": is_zero,
+                "round_sign_r": sign,
+                "round_sExp_r": hex_bits(raw_s_exp, fmt.exp_w + 2),
+                "round_sig_r": hex_bits(raw_sig, fmt.raw_sig_w),
+                "round_rm_r": f"{rm} ({ROUNDING_NAMES.get(rm, 'unknown')})",
+            },
+        )
+
+        final_rec, final_flags = mul3add_reference_from_recfn(a, b, c, d, fmt, rm)
+        final_shell = recfn_to_shell(final_rec, fmt)
+        result.final_rec_out = final_rec
+        result.final_shell_out = final_shell
+        result.final_flags = final_flags
+        result.add_stage(
+            "stage3_output",
+            {
+                "visible_pipeline_stage": "inner output register + wrapper output register",
+                "out_recfn": hex_bits(final_rec, fmt.rec_w),
+                "out_shell": hex_bits(final_shell, fmt.shell_w),
+                "out_class": recfn_class(final_rec, fmt),
+                "out_flags": flag_summary(final_flags),
+            },
+        )
+        return result
+
+
 UNITS: dict[str, tuple[str, FPFormat]] = {
     "triple_add_f64": ("add", F64),
     "triple_add_f32": ("add", F32),
     "triple_mul_f64": ("mul", F64),
     "triple_mul_f32": ("mul", F32),
+    "triple_mul_add_f64": ("muladd", F64),
+    "triple_mul_add_f32": ("muladd", F32),
 }
 
 
-def build_model(unit: str) -> TripleAddModel | TripleMulModel:
+def build_model(unit: str) -> TripleAddModel | TripleMulModel | TripleMulAddModel:
     kind, fmt = UNITS[unit]
     if kind == "add":
         return TripleAddModel(fmt)
-    return TripleMulModel(fmt)
+    if kind == "mul":
+        return TripleMulModel(fmt)
+    return TripleMulAddModel(fmt)

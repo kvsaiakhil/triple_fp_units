@@ -1,11 +1,13 @@
 # Triple-FP Python Reference Models
 
-This folder contains Python reference/debug models for the four standalone triple-FP units:
+This folder contains Python reference/debug models for the standalone custom FP units in this repo:
 
 - `TripleAddPipe_l4_f64`
 - `TripleAddPipe_l4_f32`
 - `TripleMulPipe_l4_f64`
 - `TripleMulPipe_l4_f32`
+- `TripleMulAddPipe_l4_f64`
+- `TripleMulAddPipe_l4_f32`
 
 The goal is understanding first:
 
@@ -73,6 +75,21 @@ So the raw-stage debug values are designed to line up with the RTL, while the fi
 - `stage3_output`
   software-equivalent final output and wrapper-format result
 
+### Triple Multiply-Add
+
+- `stage0_capture`
+  wrapper input register in `TripleMulAddPipe_l4_*`
+- `stage1_decode_special`
+  raw-core class decode and special-case arbitration in `TripleMulAddRecFNToRaw`
+- `stage1_finite_product`
+  exact `a*b*c` product formation before the addend merge
+- `stage1_add_normalize`
+  addend alignment, signed accumulation, and raw-result shaping
+- `stage2_round_register`
+  captured raw bundle in `TripleMulAddRecFNPipe_l2`
+- `stage3_output`
+  software-equivalent final output and wrapper-format result
+
 ## Example Usage
 
 ### Triple add, f64, IEEE inputs
@@ -97,6 +114,19 @@ python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_model
   --a 0x00000000040000000 \
   --b 0x00000000040800000 \
   --c 0x00000000041000000
+```
+
+### Triple mul-add, f64, IEEE inputs
+
+```sh
+python3 /Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/run_reference_model.py \
+  --unit triple_mul_add_f64 \
+  --input-format ieee \
+  --rm rne \
+  --a 0x3ff0000000000000 \
+  --b 0x4000000000000000 \
+  --c 0x4008000000000000 \
+  --d 0x4010000000000000
 ```
 
 ## Validation

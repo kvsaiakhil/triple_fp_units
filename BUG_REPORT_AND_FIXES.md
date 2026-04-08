@@ -185,14 +185,52 @@ Add:
 
 The project now has a much better handoff and onboarding path.
 
+## 8. Triple multiply-add lost inexact information in `f32`
+
+### Symptom
+
+During deeper random replay of the new `a*b*c+d` units, the `f32` bench exposed cases where:
+
+- the final result bits matched the software oracle
+- but the exception flags did not match
+- specifically, the RTL was returning `inexact = 0` on cases that should have raised `inexact = 1`
+
+### Root cause
+
+The first version of the triple multiply-add raw core compressed the exact triple product down to raw-rounder width before adding the fourth operand `d`.
+
+That preserved the rounded value in many cases, but it could discard information that mattered for final sticky/inexact behavior after the `product + d` accumulation step. In other words, the add was happening against a pre-compressed product term rather than the full exact product.
+
+### Fix
+
+Rework the raw core so the add uses the full exact triple product and only normalizes down to the HardFloat raw-rounder contract after the `product + d` accumulation.
+
+Relevant files:
+
+- [TripleMulAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv)
+- [verif/tb_triple_mul_add_random_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f32.sv)
+- [verif/tb_triple_mul_add_random_f64.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_mul_add_random_f64.sv)
+- [python_reference_models/triple_fp_reference_lib.py](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/python_reference_models/triple_fp_reference_lib.py)
+
+### Result
+
+After the fix:
+
+- directed `a*b*c+d` benches passed in both precisions
+- random replay passed in both precisions
+- the `f32` flag mismatch disappeared
+- the implementation now preserves exact-product information long enough to generate the correct final `inexact` flag
+
 ## Current Status
 
 At the current project state:
 
 - standalone triple add RTL is implemented and locally verified
 - standalone triple multiply RTL is implemented and locally verified
+- standalone triple multiply-add RTL is implemented and locally verified
 - directed benches pass
 - deep HardFloat/TestFloat-backed replay passes
+- Python-backed deep replay for triple multiply-add passes
 - UVM-lite replay passes
 - Python reference/debug models are in place
 
