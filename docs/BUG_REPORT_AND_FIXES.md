@@ -275,6 +275,59 @@ Relevant files:
 
 The wrappers remain BOOM-shell-compatible, but the `f32` interface is friendlier to synthesis lint and structural checks.
 
+## 11. Verilator 4.x CLI and bench incompatibilities
+
+### Symptom
+
+When trying to run the repo on older Verilator 4.x releases, several failures appeared immediately:
+
+- `Invalid option: --binary`
+- unsupported newer warning-control flags such as `-Wno-UNUSEDSIGNAL`
+- `%Error-UNSUPPORTED: timing control statement in this location`
+
+The last class of failure came from the modern SystemVerilog bench style used by the main directed, random-replay, and UVM-lite benches.
+
+### Root cause
+
+The default repo verification flow was written and validated primarily for Verilator 5.x. That flow assumes:
+
+- newer CLI options such as `--binary`
+- newer warning-switch support
+- broader support for the current timing-control placement used in the SystemVerilog benches
+
+The arithmetic RTL itself was mostly acceptable to Verilator 4.x, but the surrounding bench and invocation infrastructure was not.
+
+### Fix
+
+Add a dedicated Verilator 4.x compatibility layer rather than weakening the main 5.x flow.
+
+That compatibility layer:
+
+- replaces the unsupported SV bench flow with explicit C++ runners
+- uses 4.x-compatible Verilator invocation flags
+- reuses the checked-in random vector corpus
+- adds small directed vector files for the legacy flow
+- documents the separate legacy run path
+
+Relevant files:
+
+- [verilator4_compat/README.md](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verilator4_compat/README.md)
+- [verilator4_compat/run_verilator4_compat.sh](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verilator4_compat/run_verilator4_compat.sh)
+- [verilator4_compat/cpp/run_three_op_vectors.h](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verilator4_compat/cpp/run_three_op_vectors.h)
+- [verilator4_compat/cpp/run_four_op_vectors.h](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verilator4_compat/cpp/run_four_op_vectors.h)
+- [tb_triple_fp_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/tb_triple_fp_f32.sv)
+- [verif/tb_triple_fp_random_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/verif/tb_triple_fp_random_f32.sv)
+- [uvm_lite/triple_fp_uvm_lite_env.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/uvm_lite/triple_fp_uvm_lite_env.sv)
+
+### Result
+
+The repo now has two supported paths:
+
+- the default modern Verilator 5.x flow
+- a separate tested Verilator 4.x compatibility flow for older tool installations
+
+This keeps the main verification path modern while still giving legacy environments a practical way to run and verify the units.
+
 ## Current Status
 
 At the current project state:
