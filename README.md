@@ -45,6 +45,7 @@ Project navigation:
 - diagrams page: [docs/BLOCK_DIAGRAMS.md](./docs/BLOCK_DIAGRAMS.md)
 - examples: [examples/README.md](./examples/README.md)
 - HardFloat provenance: [docs/HARDFLOAT_USAGE_AND_PROVENANCE.md](./docs/HARDFLOAT_USAGE_AND_PROVENANCE.md)
+- Verilator 4.x compatibility: [verilator4_compat/README.md](./verilator4_compat/README.md)
 - bug log: [docs/BUG_REPORT_AND_FIXES.md](./docs/BUG_REPORT_AND_FIXES.md)
 - command log: [docs/COMMAND_HISTORY_DUMP.md](./docs/COMMAND_HISTORY_DUMP.md)
 - prompt log: [docs/PROMPT_HISTORY_DUMP.md](./docs/PROMPT_HISTORY_DUMP.md)
@@ -138,6 +139,11 @@ Optional but useful:
 - `cargo`
 - Questa, VCS, or Xcelium for functional coverage in `uvm_lite/`
 
+Version note:
+
+- the default flow in this README targets modern Verilator 5.x
+- for older Verilator 4.x environments, use [verilator4_compat/README.md](./verilator4_compat/README.md)
+
 ### macOS
 
 ```sh
@@ -199,6 +205,30 @@ There are four useful verification levels in this repo:
 4. Python staged reference/debug models
 
 There is also a reusable `uvm_lite/` layer for the original triple-add and triple-multiply families.
+For older Verilator 4.x installations, there is a separate compatibility flow in [verilator4_compat/README.md](./verilator4_compat/README.md).
+
+### Verilator 4.x compatibility flow
+
+If your environment is pinned to Verilator 4.x, do not use the default `--binary` commands in this section.
+
+Instead use the dedicated compatibility layer:
+
+```sh
+bash verilator4_compat/run_verilator4_compat.sh directed
+bash verilator4_compat/run_verilator4_compat.sh random
+bash verilator4_compat/run_verilator4_compat.sh all
+```
+
+That flow:
+
+- drives the unit tops directly from C++
+- reuses the checked-in random vector corpus
+- adds a directed vector corpus for smoke testing
+- avoids the newer SV bench constructs that Verilator 4.x does not support
+
+See:
+
+- [verilator4_compat/README.md](./verilator4_compat/README.md)
 
 ### 1. Directed standalone benches
 
