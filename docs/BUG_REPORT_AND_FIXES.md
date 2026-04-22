@@ -221,6 +221,60 @@ After the fix:
 - the `f32` flag mismatch disappeared
 - the implementation now preserves exact-product information long enough to generate the correct final `inexact` flag
 
+## 9. Presto elaboration loop-limit failure in MSB search helpers
+
+### Symptom
+
+When compiling the standalone units under Synopsys Presto / Design Compiler, elaboration could fail with:
+
+- `ELAB-900: Loop exceeded maximum iteration limit`
+
+The first reported case was in the `f32` triple-add path, but the same loop style existed in the other raw cores as well.
+
+### Root cause
+
+The original MSB-search helper functions used a reverse-counting `for` loop and manually forced loop termination by assigning to the loop variable inside the loop body.
+
+That style worked in Verilator, but it is not friendly to all synthesis elaborators.
+
+### Fix
+
+Rewrite the MSB-search helpers to use a simple forward-counting loop with no manual loop-variable modification. The final matching bit position still becomes the highest set bit.
+
+Relevant files:
+
+- [TripleAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddRecFNToRaw.sv)
+- [TripleMulRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulRecFNToRaw.sv)
+- [TripleMulAddRecFNToRaw.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddRecFNToRaw.sv)
+
+### Result
+
+The raw cores are more synthesis-friendly across tools, and the Presto loop-limit failure is removed.
+
+## 10. `f32` shell-bit synthesis lint noise
+
+### Symptom
+
+In the `f32` wrappers, synthesis lint could report large groups of unconnected top-level input bits because the wrappers intentionally use only the low 33 bits of the 65-bit BOOM-style shell.
+
+### Root cause
+
+The interface preserves BOOM compatibility at the wrapper boundary, but the higher shell bits are intentionally inactive for the local `f32` datapath.
+
+### Fix
+
+Connect the upper shell bits to explicit local wires in the `f32` wrappers so the shell is structurally consumed in a synthesis-friendly way while keeping behavior unchanged.
+
+Relevant files:
+
+- [TripleAddPipe_l4_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleAddPipe_l4_f32.sv)
+- [TripleMulPipe_l4_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulPipe_l4_f32.sv)
+- [TripleMulAddPipe_l4_f32.sv](/Users/kvsaiakhil/Projects/BoomV3/triple_fp_units/TripleMulAddPipe_l4_f32.sv)
+
+### Result
+
+The wrappers remain BOOM-shell-compatible, but the `f32` interface is friendlier to synthesis lint and structural checks.
+
 ## Current Status
 
 At the current project state:

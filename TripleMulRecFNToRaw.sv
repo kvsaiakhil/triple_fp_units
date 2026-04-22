@@ -79,10 +79,9 @@ module TripleMulRecFNToRaw #(
     integer i;
     begin
       msb_index_wide = -1;
-      for (i = WIDE_SIG_W-1; i >= 0; i = i - 1) begin
+      for (i = 0; i < WIDE_SIG_W; i = i + 1) begin
         if (value[i]) begin
           msb_index_wide = i;
-          i = -1;
         end
       end
     end

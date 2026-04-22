@@ -14,6 +14,9 @@ module TripleAddPipe_l4_f32(
   wire [32:0] inner_out;
   wire [4:0]  inner_exc;
   wire        inner_validout;
+  wire [31:0] in1_shell_hi = io_in_bits_in1[64:33];
+  wire [31:0] in2_shell_hi = io_in_bits_in2[64:33];
+  wire [31:0] in3_shell_hi = io_in_bits_in3[64:33];
 
   reg         valid;
   reg  [2:0]  in_rm;
@@ -69,4 +72,6 @@ module TripleAddPipe_l4_f32(
   assign io_out_valid = out_valid_r;
   assign io_out_bits_data = out_data_r;
   assign io_out_bits_exc = out_exc_r;
+
+  wire _unused_shell_hi_ok = &{1'b0, in1_shell_hi, in2_shell_hi, in3_shell_hi};
 endmodule

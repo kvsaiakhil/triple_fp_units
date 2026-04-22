@@ -62,10 +62,9 @@ module TripleMulAddRecFNToRaw #(
     integer i;
     begin
       msb_index_acc = -1;
-      for (i = ACC_W-1; i >= 0; i = i - 1) begin
+      for (i = 0; i < ACC_W; i = i + 1) begin
         if (value[i]) begin
           msb_index_acc = i;
-          i = -1;
         end
       end
     end
